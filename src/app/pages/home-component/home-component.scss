@@ -1,102 +1,122 @@
+/* Reset margin/padding */
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+/* Hero wrapper with background */
 .home-hero {
-  position: relative;
-  min-height: 100vh;
-  height:100%;
+  height: 100vh;
   width: 100%;
-  background-color: #ffffff;
-  font-family: 'Inter', sans-serif;
+  background: url('/assets/mentorship-illustration.png') no-repeat center center;
+  background-size: cover;
+  position: relative;
   display: flex;
   flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  text-align: center;
-  overflow: hidden; // hides scrollbars
+  background-color: white;
+  overflow: hidden;
 }
 
+/* Overlay to dim background (50% transparency) */
+.home-hero::before {
+  content: "";
+  position: absolute;
+  top: 0; left: 0;
+  height: 100%; width: 100%;
+  background-color: rgba(255, 255, 255, 0.5);
+  z-index: 0;
+}
+
+/* Navbar */
 .navbar {
-  width: 100%;
   display: flex;
   justify-content: space-between;
-  padding: 20px 60px;
   align-items: center;
-  position: absolute;
-  top: 0;
-  left: 0;
-  z-index: 10;
-  background-color: rgba(255, 255, 255, 0.95);
-  box-shadow: 0 2px 6px rgba(0,0,0,0.1);
-}
-
-.navbar .logo {
-  font-weight: bold;
-  font-size: 24px;
-}
-
-.navbar .nav-links button {
-  margin-left: 15px;
-}
-
-.hero-content {
+  padding: 1rem 2rem;
   position: relative;
-  z-index: 5;
-  max-width: 600px;
-  padding: 20px;
+  z-index: 1;
+}
+
+.logo {
+  font-size: 1.5rem;
+  font-weight: bold;
+  color: #007bff;
+}
+
+.nav-links button {
+  margin-left: 1rem;
+}
+
+/* Hero Content */
+.hero-content {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  text-align: center;
+  color: black;
+  z-index: 1;
+  position: relative;
+  padding: 0 1rem;
 }
 
 .hero-content h1 {
-  font-size: 3rem;
-  margin-bottom: 20px;
+  font-size: 2.5rem;
+  margin-bottom: 1rem;
 }
 
 .hero-content p {
   font-size: 1.2rem;
-  margin-bottom: 30px;
+  margin-bottom: 2rem;
+  max-width: 600px;
 }
 
-.hero-buttons .btn-lg {
-  padding: 15px 30px;
-  font-size: 1.1rem;
-  margin: 0 10px;
-  border-radius: 8px;
+.hero-buttons button {
+  margin: 0 0.5rem;
 }
 
+/* Buttons */
 .btn {
   border: none;
-  border-radius: 8px;
+  border-radius: 6px;
+  padding: 0.6rem 1.2rem;
   cursor: pointer;
-  transition: all 0.2s ease-in-out;
+  font-size: 1rem;
 }
 
 .btn-primary {
-  background-color: #0077b5;
+  background-color: #007bff;
   color: white;
 }
 
-.btn-primary:hover {
-  background-color: #005f8d;
-}
-
-.btn-secondary {
-  background-color: #e5e7eb;
-  color: #1f2937;
-}
-
 .btn-outline {
-  background-color: transparent;
-  border: 2px solid #0077b5;
-  color: #0077b5;
+  background: transparent;
+  border: 2px solid #007bff;
+  color: #007bff;
 }
 
-/* Full-screen background image behind content */
-.hero-image {
-  position: absolute;
-  top: 50%;
-  left: 50%;
-  width: 100%;
-  height: 100%;
-  object-fit: cover; // scale image to cover container
-  transform: translate(-50%, -50%);
-  z-index: 1;
-  opacity: 0.5;
-  pointer-events: none;
+.btn-lg {
+  padding: 0.8rem 1.6rem;
+  font-size: 1.1rem;
+}
+
+/* Responsive (mobile adjustments) */
+@media (max-width: 768px) {
+  .hero-content h1 {
+    font-size: 2rem;
+  }
+
+  .hero-content p {
+    font-size: 1rem;
+  }
+
+  .navbar {
+    flex-direction: column;
+  }
+
+  .nav-links {
+    margin-top: 0.5rem;
+  }
 }
