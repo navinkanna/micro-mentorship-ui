@@ -1,0 +1,111 @@
+.auth-container {
+    max-width: 400px;
+    margin: auto;
+    padding: 2rem;
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+    text-align: center;
+  
+    .btn-linkedin {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 0.5rem;
+      background-color: white;
+      color: black;
+      font-weight: 600;
+      padding: 0.75rem;
+      border-radius: 0.5rem;
+      border: none;
+      cursor: pointer;
+      transition: background 0.2s;
+  
+      &:hover {
+        background-color: #0077b5;
+      }
+  
+      img {
+        width: 20px;
+        height: 20px;
+      }
+    }
+  
+    .divider {
+      display: flex;
+      align-items: center;
+      text-align: center;
+      margin: 1rem 0;
+      color: #888;
+  
+      &::before,
+      &::after {
+        content: '';
+        flex: 1;
+        height: 1px;
+        background: #ccc;
+      }
+  
+      span {
+        padding: 0 1rem;
+      }
+    }
+  
+    form {
+      display: flex;
+      flex-direction: column;
+      gap: 1rem;
+  
+      input {
+        padding: 0.75rem;
+        border-radius: 0.5rem;
+        border: 1px solid #ccc;
+        font-size: 1rem;
+      }
+  
+      .btn-primary {
+        padding: 0.75rem;
+        border-radius: 0.5rem;
+        border: none;
+        background-color: #4f46e5;
+        color: white;
+        font-weight: 600;
+        cursor: pointer;
+        transition: background 0.2s;
+  
+        &:hover {
+          background-color: #4338ca;
+        }
+      }
+    }
+  
+    p {
+      font-size: 0.9rem;
+      a {
+        color: #4f46e5;
+        font-weight: 600;
+        text-decoration: none;
+  
+        &:hover {
+          text-decoration: underline;
+        }
+      }
+    }
+  }
+  .btn-back {
+    background: none;
+    border: none;
+    color: #4f46e5;
+    font-weight: 600;
+    cursor: pointer;
+    margin-bottom: 1rem;
+    font-size: 0.9rem;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+  
+    &:hover {
+      text-decoration: underline;
+    }
+  }
+  
