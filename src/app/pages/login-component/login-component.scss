@@ -1,0 +1,28 @@
+.login-container {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+    text-align: center;
+  }
+  
+  .linkedin-btn {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    background-color: #0077b5;
+    color: white;
+    padding: 12px 24px;
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+    font-size: 16px;
+    margin-top: 20px;
+  }
+  
+  .linkedin-btn img {
+    width: 24px;
+    height: 24px;
+  }
+  

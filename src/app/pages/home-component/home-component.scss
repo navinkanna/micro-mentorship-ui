@@ -1,0 +1,87 @@
+.home-hero {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    font-family: 'Inter', sans-serif;
+    min-height: 100vh;
+    background: linear-gradient(135deg, #f5f7fa, #c3cfe2);
+    color: #1f2937;
+  }
+  
+  .navbar {
+    width: 100%;
+    display: flex;
+    justify-content: space-between;
+    padding: 20px 60px;
+    align-items: center;
+    background-color: rgba(255, 255, 255, 0.85);
+    box-shadow: 0 2px 6px rgba(0,0,0,0.1);
+    position: fixed;
+    top: 0;
+  }
+  
+  .navbar .logo {
+    font-weight: bold;
+    font-size: 24px;
+  }
+  
+  .navbar .nav-links button {
+    margin-left: 15px;
+  }
+  
+  .hero-content {
+    margin-top: 120px; // to offset fixed navbar
+    text-align: center;
+    max-width: 600px;
+  }
+  
+  .hero-content h1 {
+    font-size: 3rem;
+    margin-bottom: 20px;
+  }
+  
+  .hero-content p {
+    font-size: 1.2rem;
+    margin-bottom: 30px;
+  }
+  
+  .hero-buttons .btn-lg {
+    padding: 15px 30px;
+    font-size: 1.1rem;
+    margin: 0 10px;
+    border-radius: 8px;
+  }
+  
+  .btn {
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: all 0.2s ease-in-out;
+  }
+  
+  .btn-primary {
+    background-color: #0077b5;
+    color: white;
+  }
+  
+  .btn-primary:hover {
+    background-color: #005f8d;
+  }
+  
+  .btn-secondary {
+    background-color: #e5e7eb;
+    color: #1f2937;
+  }
+  
+  .btn-outline {
+    background-color: transparent;
+    border: 2px solid #0077b5;
+    color: #0077b5;
+  }
+  
+  .hero-image img {
+    margin-top: 50px;
+    max-width: 500px;
+    width: 100%;
+  }
+  
