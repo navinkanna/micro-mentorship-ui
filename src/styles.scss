@@ -1,4 +1,15 @@
 /* You can add global styles to this file, and also import other style files */
+/* Reset browser defaults */
+html, body {
+  margin: 0;
+  padding: 0;
+  width: 100%;
+  height: 100%;
+  overflow-x: hidden; /* prevents horizontal scrollbars */
+  overflow-y: hidden; /* prevents vertical scrollbars */
+  font-family: 'Inter', sans-serif;
+}
+
 .auth-container {
     max-width: 400px;
     margin: 100px auto;
