@@ -1,0 +1,27 @@
+<div class="auth-container">
+  <button class="btn btn-back" (click)="backToHome()">
+    &larr; Back to Home
+  </button>
+
+  <h2>Sign Up</h2>
+
+  <button class="btn btn-linkedin" type="button" (click)="loginWithLinkedIn()">
+    <img src="assets/linkedin-logo.svg" alt="LinkedIn Logo" />
+    Sign up with LinkedIn
+  </button>
+
+  <div class="divider">
+    <span>OR</span>
+  </div>
+
+  <form [formGroup]="form" (ngSubmit)="submit()">
+    <input type="text" formControlName="name" placeholder="Full Name" />
+    <input type="email" formControlName="email" placeholder="Email" />
+    <input type="password" formControlName="password" placeholder="Password" />
+    <button type="submit" class="btn btn-primary" [disabled]="isLoading">
+      {{ isLoading ? 'Creating Account...' : 'Sign Up' }}
+    </button>
+  </form>
+
+  <p>Already have an account? <a (click)="login()">Login</a></p>
+</div>

@@ -1,0 +1,45 @@
+<div class="auth-container">
+    <h2>Login</h2>
+    <!-- <button class="btn btn-linkedin">
+      <img src="assets/linkedin-logo.png" alt="LinkedIn Logo" />
+      Sign in with LinkedIn
+    </button> -->
+  
+    <!-- <p class="divider">or</p> -->
+  
+    <form [formGroup]="form" (ngSubmit)="submit()">
+      <div class="form-group">
+        <label for="email">Email:</label>
+      <input id="email" formControlName="email" type="email" placeholder="Email" />
+      </div>
+      @if (form.controls.email.invalid && form.controls.email.touched) {
+        <div class="error">
+          @if (form.controls.email.errors?.['required']) {
+            <small>Email is required</small>
+          }
+          @if (form.controls.email.errors?.['email']) {
+            <small>Please enter a valid email address</small>
+          }
+        </div>
+      }
+      <div class="form-group">
+        <label for="password">Password:</label>
+      <input id="password" formControlName="password"type="password" placeholder="Password" />
+      </div>
+      @if (form.controls.password.invalid && form.controls.password.touched) {
+        <div class="error">
+          @if (form.controls.password.errors?.['required']) {
+            <small>Password is required.</small>
+          }
+          @if (form.controls.password.errors?.['minlength']) {
+            <small>Password must be at least 6 characters long.</small>
+          }
+        </div>
+      }
+
+      <button id="submit" type="submit" class="btn btn-primary">Login</button>
+    </form>
+  
+    <p>Don't have an account? <a routerLink="/signup">Sign Up</a></p>
+  </div>
+  

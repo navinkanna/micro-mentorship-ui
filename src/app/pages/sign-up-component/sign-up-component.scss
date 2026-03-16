@@ -1,0 +1,116 @@
+.auth-container {
+    max-width: 350px; // reduced width
+    margin: 2rem auto; // add some vertical spacing
+    padding: 1.5rem; // slightly smaller padding
+    display: flex;
+    flex-direction: column;
+    gap: 0.75rem; // reduced gap
+    text-align: center;
+    border-radius: 0.75rem;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1); // subtle card shadow
+    background-color: #ffffff;
+
+    .btn-linkedin {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 0.5rem;
+      background-color: white;
+      color: black;
+      font-weight: 600;
+      padding: 0.65rem; // smaller padding
+      border-radius: 0.5rem;
+      border: none;
+      cursor: pointer;
+      transition: background 0.2s;
+
+      &:hover {
+        background-color: #0077b5;
+        color: white;
+      }
+
+      img {
+        width: 18px; // slightly smaller icon
+        height: 18px;
+      }
+    }
+
+    .divider {
+      display: flex;
+      align-items: center;
+      text-align: center;
+      margin: 0.75rem 0; // smaller margin
+      color: #888;
+
+      &::before,
+      &::after {
+        content: '';
+        flex: 1;
+        height: 1px;
+        background: #ccc;
+      }
+
+      span {
+        padding: 0 1rem;
+      }
+    }
+
+    form {
+      display: flex;
+      flex-direction: column;
+      gap: 0.75rem; // smaller gap
+
+      input {
+        padding: 0.65rem; // smaller padding
+        border-radius: 0.5rem;
+        border: 1px solid #ccc;
+        font-size: 0.95rem; // slightly smaller text
+      }
+
+      .btn-primary {
+        padding: 0.65rem; // smaller button
+        border-radius: 0.5rem;
+        border: none;
+        background-color: #4f46e5;
+        color: white;
+        font-weight: 600;
+        cursor: pointer;
+        transition: background 0.2s;
+
+        &:hover {
+          background-color: #4338ca;
+        }
+      }
+    }
+
+    p {
+      font-size: 0.85rem; // smaller text
+      a {
+        color: #4f46e5;
+        font-weight: 600;
+        text-decoration: none;
+
+        &:hover {
+          text-decoration: underline;
+        }
+      }
+    }
+  }
+
+  .btn-back {
+    background: none;
+    border: none;
+    color: #4f46e5;
+    font-weight: 600;
+    cursor: pointer;
+    margin-bottom: 0.75rem; // smaller margin
+    font-size: 0.85rem; // smaller font
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+
+    &:hover {
+      text-decoration: underline;
+    }
+  }
+  
