@@ -1,27 +1,28 @@
-<div class="auth-container">
-  <button class="btn btn-back" (click)="backToHome()">
-    &larr; Back to Home
-  </button>
+<section class="signup-shell">
+  <div class="signup-card">
+    <button class="btn-back" type="button" (click)="backToHome()">&larr; Back to home</button>
 
-  <h2>Sign Up</h2>
+    <p class="eyebrow">Create account</p>
+    <h1>Join in a few steps.</h1>
 
-  <button class="btn btn-linkedin" type="button" (click)="loginWithLinkedIn()">
-    <img src="assets/linkedin-logo.svg" alt="LinkedIn Logo" />
-    Sign up with LinkedIn
-  </button>
-
-  <div class="divider">
-    <span>OR</span>
-  </div>
-
-  <form [formGroup]="form" (ngSubmit)="submit()">
-    <input type="text" formControlName="name" placeholder="Full Name" />
-    <input type="email" formControlName="email" placeholder="Email" />
-    <input type="password" formControlName="password" placeholder="Password" />
-    <button type="submit" class="btn btn-primary" [disabled]="isLoading">
-      {{ isLoading ? 'Creating Account...' : 'Sign Up' }}
+    <button class="btn-linkedin" type="button" (click)="loginWithLinkedIn()">
+      <img src="assets/linkedin-logo.svg" alt="LinkedIn Logo" />
+      Continue with LinkedIn
     </button>
-  </form>
 
-  <p>Already have an account? <a (click)="login()">Login</a></p>
-</div>
+    <div class="divider">
+      <span>OR</span>
+    </div>
+
+    <form [formGroup]="form" (ngSubmit)="submit()">
+      <input type="text" formControlName="name" placeholder="Full Name" />
+      <input type="email" formControlName="email" placeholder="Work Email" />
+      <input type="password" formControlName="password" placeholder="Create Password" />
+      <button type="submit" class="btn-primary" [disabled]="isLoading">
+        {{ isLoading ? 'Creating Account...' : 'Create Account' }}
+      </button>
+    </form>
+
+    <p class="switch-copy">Already have an account? <a (click)="login()">Login</a></p>
+  </div>
+</section>

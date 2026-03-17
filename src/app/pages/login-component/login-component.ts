@@ -1,7 +1,7 @@
 import { CommonModule } from '@angular/common';
 import { Component } from '@angular/core';
 import { ReactiveFormsModule, FormBuilder, Validators } from '@angular/forms';
-import { RouterModule } from '@angular/router';
+import { Router, RouterModule } from '@angular/router';
 import { AuthService } from '../../services/auth-service';
 
 @Component({
@@ -12,7 +12,10 @@ import { AuthService } from '../../services/auth-service';
   styleUrl: './login-component.scss'
 })
 export class LoginComponent {
-  constructor(private fb: FormBuilder, private auth: AuthService) {}
+  isSubmitting = false;
+  errorMessage = '';
+
+  constructor(private fb: FormBuilder, private auth: AuthService, private router: Router) {}
   form: any;
 
   ngOnInit() {
@@ -24,23 +27,28 @@ export class LoginComponent {
 
   submit() {
     if (this.form.valid) {
+      this.isSubmitting = true;
+      this.errorMessage = '';
+
       const payload = {
         username: this.form.value.email,
         password: this.form.value.password
-      }
+      };
+
       this.auth.login(payload).subscribe({
         next: (tokens) => {
-          this.auth.storeTokens(tokens);
-          alert('Login successful!');
+          this.auth.storeSession(payload.username, tokens);
+          this.isSubmitting = false;
+          this.router.navigate(['/home']);
         },
         error: (err) => {
+          this.isSubmitting = false;
           console.error('Login failed', err);
-          alert('Login failed. Please try again.');
+          this.errorMessage = 'Login failed. Check your credentials and try again.';
         }
       });
     } else {
-      console.log('Form is invalid');
-      this.form.markAllAsTouched(); // Mark all fields as touched to trigger validation messages
+      this.form.markAllAsTouched();
       return;
     }
   }

@@ -1,0 +1,120 @@
+<section class="profile-shell">
+  <div class="profile-card">
+    <div class="profile-header">
+      <div>
+        <p class="eyebrow">Profile settings</p>
+        <h1>Your profile</h1>
+      </div>
+      <button type="button" class="btn-secondary" (click)="backHome()">Back to home</button>
+    </div>
+
+    @if (isLoading) {
+      <p class="save-message">Loading profile...</p>
+    }
+
+    <form [formGroup]="form" (ngSubmit)="saveProfile()">
+      <div class="field-grid two-up">
+        <div class="field">
+          <label for="firstName">First name</label>
+          <input id="firstName" type="text" formControlName="firstName" placeholder="Navin" />
+        </div>
+        <div class="field">
+          <label for="lastName">Last name</label>
+          <input id="lastName" type="text" formControlName="lastName" placeholder="Patel" />
+        </div>
+      </div>
+
+      <div class="field-grid two-up">
+        <div class="field">
+          <label for="role">Role</label>
+          <input
+            id="role"
+            type="text"
+            formControlName="role"
+            placeholder="Frontend Engineer"
+          />
+        </div>
+        <div class="field">
+          <label for="industry">Industry</label>
+          <input id="industry" type="text" formControlName="industry" placeholder="SaaS" />
+        </div>
+      </div>
+
+      <div class="field-grid two-up">
+        <div class="field">
+          <label for="company">Company</label>
+          <input id="company" type="text" formControlName="company" placeholder="Acme Labs" />
+        </div>
+        <div class="field">
+          <label for="location">Location</label>
+          <input id="location" type="text" formControlName="location" placeholder="Chicago, IL" />
+        </div>
+      </div>
+
+      <div class="field-grid two-up">
+        <div class="field">
+          <label for="expertise">Expertise</label>
+          <input
+            id="expertise"
+            type="text"
+            formControlName="expertise"
+            placeholder="Angular, UX systems, mentoring"
+          />
+        </div>
+        <div class="field">
+          <label for="yearsOfExperience">Years of experience</label>
+          <input
+            id="yearsOfExperience"
+            type="text"
+            formControlName="yearsOfExperience"
+            placeholder="6"
+          />
+        </div>
+      </div>
+
+      <div class="field">
+        <label for="headline">Headline</label>
+        <input
+          id="headline"
+          type="text"
+          formControlName="headline"
+          placeholder="Building thoughtful interfaces for ambitious teams."
+        />
+      </div>
+
+      <div class="field">
+        <label for="topics">Topics you like discussing</label>
+        <input
+          id="topics"
+          type="text"
+          formControlName="topics"
+          placeholder="career growth, startup ideas, frontend architecture"
+        />
+      </div>
+
+      <div class="field">
+        <label for="bio">Short bio</label>
+        <textarea
+          id="bio"
+          rows="5"
+          formControlName="bio"
+          placeholder="Write 2-3 sentences about your background and the kinds of conversations you want."
+        ></textarea>
+      </div>
+
+      @if (saveMessage) {
+        <p class="save-message">{{ saveMessage }}</p>
+      }
+
+      @if (errorMessage) {
+        <p class="error-message">{{ errorMessage }}</p>
+      }
+
+      <div class="actions">
+        <button type="submit" class="btn-primary" [disabled]="isSaving || isLoading">
+          {{ isSaving ? 'Saving...' : 'Save profile' }}
+        </button>
+      </div>
+    </form>
+  </div>
+</section>
