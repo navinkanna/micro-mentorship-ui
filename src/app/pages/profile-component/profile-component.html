@@ -26,13 +26,15 @@
 
       <div class="field-grid two-up">
         <div class="field">
-          <label for="role">Role</label>
-          <input
-            id="role"
-            type="text"
-            formControlName="role"
-            placeholder="Frontend Engineer"
-          />
+          <label for="role">Preferred role</label>
+          <select id="role" formControlName="role">
+            <option value="">Select role</option>
+            <option value="mentee">Mentee</option>
+            <option value="mentor">Mentor</option>
+          </select>
+          @if (form.controls.role.invalid && form.controls.role.touched) {
+            <p class="error-message">Select mentor or mentee.</p>
+          }
         </div>
         <div class="field">
           <label for="industry">Industry</label>
@@ -83,7 +85,7 @@
       </div>
 
       <div class="field">
-        <label for="topics">Topics you like discussing</label>
+        <label for="topics">Topics</label>
         <input
           id="topics"
           type="text"
@@ -93,7 +95,7 @@
       </div>
 
       <div class="field">
-        <label for="bio">Short bio</label>
+        <label for="bio">Bio</label>
         <textarea
           id="bio"
           rows="5"

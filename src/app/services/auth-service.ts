@@ -16,6 +16,17 @@ export interface UserProfile {
   topics: string;
 }
 
+export interface RegisterPayload {
+  userName: string;
+  password: string;
+  role: string;
+}
+
+export interface TokenResponse {
+  token: string;
+  refreshToken: string;
+}
+
 @Injectable({
   providedIn: 'root'
 })
@@ -24,12 +35,12 @@ export class AuthService {
   private readonly refreshTokenKey = 'refresh_Token';
   private readonly emailKey = 'user_email';
   private readonly apiUrl = '/api/Authorize/login';
+  private readonly registerApiUrl = '/api/Authorize/register';
   private readonly refreshApiUrl = '/api/Authorize/refresh';
   private readonly profileApiUrl = '/api/profile';
   private readonly authenticated = signal(this.hasStoredSession());
   private readonly currentUserEmail = signal(localStorage.getItem(this.emailKey) ?? '');
-  private refreshRequest$: Observable<{ accessToken?: string; refreshToken?: string; token?: string }> | null =
-    null;
+  private refreshRequest$: Observable<TokenResponse> | null = null;
 
   readonly isAuthenticated = computed(() => this.authenticated());
   readonly userEmail = computed(() => this.currentUserEmail());
@@ -39,37 +50,24 @@ export class AuthService {
   login(payload: {
     username: string;
     password: string;
-  }): Observable<{ accessToken?: string; refreshToken?: string; token?: string }> {
-    return this.http.post<{ accessToken?: string; refreshToken?: string; token?: string }>(
-      this.apiUrl,
-      payload
-    );
+  }): Observable<TokenResponse> {
+    return this.http.post<TokenResponse>(this.apiUrl, payload);
   }
 
-  storeSession(
-    email: string,
-    tokens: { accessToken?: string; refreshToken?: string; token?: string }
-  ): void {
-    const accessToken = tokens.accessToken ?? tokens.token;
+  register(payload: RegisterPayload): Observable<string> {
+    return this.http.post(this.registerApiUrl, payload, { responseType: 'text' });
+  }
 
-    if (!accessToken) {
-      throw new Error('Login response did not include a token.');
-    }
-
-    localStorage.setItem(this.accessTokenKey, accessToken);
-
-    if (tokens.refreshToken) {
-      localStorage.setItem(this.refreshTokenKey, tokens.refreshToken);
-    } else {
-      localStorage.removeItem(this.refreshTokenKey);
-    }
+  storeSession(email: string, tokens: TokenResponse): void {
+    localStorage.setItem(this.accessTokenKey, tokens.token);
+    localStorage.setItem(this.refreshTokenKey, tokens.refreshToken);
 
     localStorage.setItem(this.emailKey, email);
     this.currentUserEmail.set(email);
     this.authenticated.set(true);
   }
 
-  refreshToken(): Observable<{ accessToken?: string; refreshToken?: string; token?: string }> {
+  refreshToken(): Observable<TokenResponse> {
     if (this.refreshRequest$) {
       return this.refreshRequest$;
     }
@@ -86,10 +84,7 @@ export class AuthService {
     };
 
     this.refreshRequest$ = this.http
-      .post<{ accessToken?: string; refreshToken?: string; token?: string }>(
-        this.refreshApiUrl,
-        requestBody
-      )
+      .post<TokenResponse>(this.refreshApiUrl, requestBody)
       .pipe(
         tap((tokens) => {
           this.storeSession(this.currentUserEmail() || localStorage.getItem(this.emailKey) || '', tokens);
@@ -125,6 +120,10 @@ export class AuthService {
 
   getProfile(): Observable<UserProfile> {
     return this.http.get<UserProfile>(this.profileApiUrl);
+  }
+
+  createProfile(profile: UserProfile): Observable<UserProfile> {
+    return this.http.post<UserProfile>(this.profileApiUrl, profile);
   }
 
   saveProfile(profile: UserProfile): Observable<UserProfile> {

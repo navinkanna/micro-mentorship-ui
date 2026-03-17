@@ -15,13 +15,14 @@ export class ProfileComponent {
   readonly form;
   isLoading = true;
   isSaving = false;
+  profileExists = false;
   saveMessage = '';
   errorMessage = '';
 
   constructor(private fb: FormBuilder, private router: Router, public auth: AuthService) {
     this.form = this.fb.group({
-      firstName: ['', Validators.required],
-      lastName: ['', Validators.required],
+      firstName: [''],
+      lastName: [''],
       role: ['', Validators.required],
       expertise: [''],
       yearsOfExperience: [''],
@@ -38,9 +39,11 @@ export class ProfileComponent {
     this.auth.getProfile().subscribe({
       next: (profile) => {
         this.form.patchValue(profile);
+        this.profileExists = true;
         this.isLoading = false;
       },
       error: () => {
+        this.profileExists = false;
         this.isLoading = false;
       }
     });
@@ -60,14 +63,19 @@ export class ProfileComponent {
     this.saveMessage = '';
     this.errorMessage = '';
 
-    this.auth.saveProfile(this.form.getRawValue() as UserProfile).subscribe({
+    const request$ = this.profileExists
+      ? this.auth.saveProfile(this.form.getRawValue() as UserProfile)
+      : this.auth.createProfile(this.form.getRawValue() as UserProfile);
+
+    request$.subscribe({
       next: () => {
         this.isSaving = false;
-        this.saveMessage = 'Profile saved.';
+        this.profileExists = true;
+        this.router.navigate(['/home']);
       },
       error: () => {
         this.isSaving = false;
-        this.errorMessage = 'Profile could not be saved. Add your API endpoint when ready.';
+        this.errorMessage = 'Profile could not be saved.';
       }
     });
   }

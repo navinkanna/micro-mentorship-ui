@@ -3,21 +3,40 @@
     <button class="btn-back" type="button" (click)="backToHome()">&larr; Back to home</button>
 
     <p class="eyebrow">Create account</p>
-    <h1>Join in a few steps.</h1>
-
-    <button class="btn-linkedin" type="button" (click)="loginWithLinkedIn()">
-      <img src="assets/linkedin-logo.svg" alt="LinkedIn Logo" />
-      Continue with LinkedIn
-    </button>
-
-    <div class="divider">
-      <span>OR</span>
-    </div>
+    <h1>Get started.</h1>
 
     <form [formGroup]="form" (ngSubmit)="submit()">
-      <input type="text" formControlName="name" placeholder="Full Name" />
       <input type="email" formControlName="email" placeholder="Work Email" />
+      @if (form.controls.email.invalid && form.controls.email.touched) {
+        <p class="error-message">
+          @if (form.controls.email.errors?.['required']) {
+            Email is required.
+          } @else if (form.controls.email.errors?.['email']) {
+            Enter a valid email.
+          }
+        </p>
+      }
+
       <input type="password" formControlName="password" placeholder="Create Password" />
+      @if (form.controls.password.invalid && form.controls.password.touched) {
+        <p class="error-message">
+          @if (form.controls.password.errors?.['required']) {
+            Password is required.
+          } @else if (form.controls.password.errors?.['minlength']) {
+            Password must be at least 6 characters.
+          }
+        </p>
+      }
+
+      <select formControlName="role">
+        <option value="mentee">Mentee</option>
+        <option value="mentor">Mentor</option>
+      </select>
+
+      @if (errorMessage) {
+        <p class="error-message">{{ errorMessage }}</p>
+      }
+
       <button type="submit" class="btn-primary" [disabled]="isLoading">
         {{ isLoading ? 'Creating Account...' : 'Create Account' }}
       </button>
