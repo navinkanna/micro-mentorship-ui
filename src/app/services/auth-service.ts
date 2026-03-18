@@ -3,6 +3,7 @@ import { HttpClient } from '@angular/common/http';
 import { finalize, Observable, shareReplay, tap } from 'rxjs';
 
 export interface UserProfile {
+  avatarId: string;
   firstName: string;
   lastName: string;
   role: string;

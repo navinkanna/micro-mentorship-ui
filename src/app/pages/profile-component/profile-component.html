@@ -13,6 +13,24 @@
     }
 
     <form [formGroup]="form" (ngSubmit)="saveProfile()">
+      <div class="field">
+        <label>Avatar</label>
+        <div class="avatar-preview-row">
+          <div class="avatar-preview">
+            <app-avatar-illustration [avatarId]="selectedAvatarId" [size]="144"></app-avatar-illustration>
+          </div>
+          <button type="button" class="avatar-edit-button" (click)="openAvatarPicker()" aria-label="Edit avatar">
+            <svg viewBox="0 0 24 24" aria-hidden="true">
+              <path
+                d="M4 20h4l10.5-10.5-4-4L4 16v4Zm13.7-12.3 1.6-1.6a1.5 1.5 0 0 0 0-2.1l-.3-.3a1.5 1.5 0 0 0-2.1 0l-1.6 1.6 2.4 2.4Z"
+                fill="currentColor"
+              />
+            </svg>
+            <span>Edit avatar</span>
+          </button>
+        </div>
+      </div>
+
       <div class="field-grid two-up">
         <div class="field">
           <label for="firstName">First name</label>
@@ -120,3 +138,34 @@
     </form>
   </div>
 </section>
+
+@if (isAvatarPickerOpen) {
+  <div class="avatar-modal-backdrop" (click)="closeAvatarPicker()">
+    <div class="avatar-modal" (click)="$event.stopPropagation()">
+      <div class="avatar-modal-header">
+        <div>
+          <p class="eyebrow">Choose avatar</p>
+          <h2>Pick the one that fits you best</h2>
+        </div>
+        <button type="button" class="avatar-close-button" (click)="closeAvatarPicker()" aria-label="Close avatar picker">
+          <svg viewBox="0 0 24 24" aria-hidden="true">
+            <path d="M6 6 18 18M18 6 6 18" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" />
+          </svg>
+        </button>
+      </div>
+
+      <div class="avatar-grid">
+        @for (avatar of avatars; track avatar.id) {
+          <button
+            type="button"
+            class="avatar-option"
+            [class.active]="selectedAvatarId === avatar.id"
+            (click)="selectAvatar(avatar.id)"
+          >
+            <app-avatar-illustration [avatarId]="avatar.id" [size]="104"></app-avatar-illustration>
+          </button>
+        }
+      </div>
+    </div>
+  </div>
+}

@@ -3,24 +3,30 @@ import { Component } from '@angular/core';
 import { FormBuilder, ReactiveFormsModule, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
 import { AuthService, UserProfile } from '../../services/auth-service';
+import { AvatarIllustrationComponent } from '../../shared/avatar-illustration.component';
+import { avatarOptions } from '../../shared/avatar-options';
 
 @Component({
   selector: 'app-profile-component',
   standalone: true,
-  imports: [CommonModule, ReactiveFormsModule],
+  imports: [CommonModule, ReactiveFormsModule, AvatarIllustrationComponent],
   templateUrl: './profile-component.html',
   styleUrl: './profile-component.scss'
 })
 export class ProfileComponent {
+  readonly avatars = avatarOptions;
+  readonly defaultAvatarId = avatarOptions[0].id;
   readonly form;
   isLoading = true;
   isSaving = false;
   profileExists = false;
   saveMessage = '';
   errorMessage = '';
+  isAvatarPickerOpen = false;
 
   constructor(private fb: FormBuilder, private router: Router, public auth: AuthService) {
     this.form = this.fb.group({
+      avatarId: [avatarOptions[0].id, Validators.required],
       firstName: [''],
       lastName: [''],
       role: ['', Validators.required],
@@ -38,7 +44,10 @@ export class ProfileComponent {
   ngOnInit() {
     this.auth.getProfile().subscribe({
       next: (profile) => {
-        this.form.patchValue(profile);
+        this.form.patchValue({
+          ...profile,
+          avatarId: profile.avatarId || this.defaultAvatarId
+        });
         this.profileExists = true;
         this.isLoading = false;
       },
@@ -51,6 +60,23 @@ export class ProfileComponent {
 
   backHome() {
     this.router.navigate(['/home']);
+  }
+
+  selectAvatar(avatarId: string) {
+    this.form.patchValue({ avatarId });
+    this.isAvatarPickerOpen = false;
+  }
+
+  openAvatarPicker() {
+    this.isAvatarPickerOpen = true;
+  }
+
+  closeAvatarPicker() {
+    this.isAvatarPickerOpen = false;
+  }
+
+  get selectedAvatarId(): string {
+    return this.form.value.avatarId || this.defaultAvatarId;
   }
 
   saveProfile() {

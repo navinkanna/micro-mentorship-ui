@@ -31,7 +31,7 @@
 
       <div class="hero-actions">
         @if (auth.isAuthenticated()) {
-          <button class="btn btn-primary btn-large">Preview your member card</button>
+          <button class="btn btn-primary btn-large" (click)="previewCard()">Preview your member card</button>
         } @else {
           <button (click)="signup()" class="btn btn-primary btn-large">Get Started</button>
           <button (click)="login()" class="btn btn-ghost">I already have an account</button>
@@ -80,4 +80,53 @@
     </div>
   </section>
 
+  @if (isPreviewOpen) {
+    <div class="member-card-overlay" (click)="closePreview()">
+      <section class="member-card-modal" (click)="$event.stopPropagation()">
+        <button class="modal-close" type="button" (click)="closePreview()">Close</button>
+        @if (memberCardProfile) {
+          <div class="member-card">
+            <app-avatar-illustration [avatarId]="memberCardProfile.avatarId" [size]="120"></app-avatar-illustration>
+            <p class="card-label">Member preview</p>
+            <h2>
+              {{ memberCardProfile.firstName || 'New' }}
+              {{ memberCardProfile.lastName || 'Member' }}
+            </h2>
+            <span class="member-role">{{ memberCardProfile.role || 'Professional' }}</span>
+            <p class="member-headline">
+              {{ memberCardProfile.headline || 'Building a clear profile for better conversations.' }}
+            </p>
+            <div class="member-meta">
+              @if (memberCardProfile.expertise) {
+                <span>{{ memberCardProfile.expertise }}</span>
+              }
+              @if (memberCardProfile.industry) {
+                <span>{{ memberCardProfile.industry }}</span>
+              }
+              @if (memberCardProfile.location) {
+                <span>{{ memberCardProfile.location }}</span>
+              }
+            </div>
+            @if (memberCardProfile.bio) {
+              <p class="member-bio">{{ memberCardProfile.bio }}</p>
+            }
+            @if (memberCardProfile.topics) {
+              <div class="member-topics">
+                @for (topic of memberCardProfile.topics.split(','); track topic) {
+                  <span>{{ topic.trim() }}</span>
+                }
+              </div>
+            }
+          </div>
+        } @else {
+          <div class="member-card empty">
+            <p class="card-label">Member preview</p>
+            <h2>Finish your profile</h2>
+            <p class="member-headline">Add your avatar and a few details to see your card.</p>
+            <button class="btn btn-primary" (click)="profile()">Open profile</button>
+          </div>
+        }
+      </section>
+    </div>
+  }
 </div>
