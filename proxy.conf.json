@@ -3,5 +3,11 @@
     "target": "https://localhost:7105",
     "secure": false,
     "changeOrigin": true
+  },
+  "/chat-hub": {
+    "target": "https://localhost:7105",
+    "secure": false,
+    "changeOrigin": true,
+    "ws": true
   }
 }

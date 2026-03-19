@@ -35,6 +35,10 @@ export class HomeComponent {
     this.router.navigate(['/profile']);
   }
 
+  chat() {
+    this.router.navigate(['/chat']);
+  }
+
   previewCard() {
     this.isPreviewOpen = true;
     if (!this.memberCardProfile && !this.hasAttemptedProfileLoad) {

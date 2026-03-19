@@ -30,8 +30,9 @@
       <p class="hero-subtitle">Quick conversations for thoughtful professionals.</p>
 
       <div class="hero-actions">
-        @if (auth.isAuthenticated()) {
-          <button class="btn btn-primary btn-large" (click)="previewCard()">Preview your member card</button>
+      @if (auth.isAuthenticated()) {
+          <button class="btn btn-primary btn-large" (click)="chat()">Start chatting</button>
+          <button class="btn btn-secondary" (click)="previewCard()">Preview your member card</button>
         } @else {
           <button (click)="signup()" class="btn btn-primary btn-large">Get Started</button>
           <button (click)="login()" class="btn btn-ghost">I already have an account</button>
