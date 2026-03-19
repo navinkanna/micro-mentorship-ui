@@ -1,5 +1,5 @@
 export const environment = {
   production: true,
-  apiBaseUrl: 'https://replace-me-with-your-render-api-url.onrender.com/api',
-  chatHubUrl: 'https://replace-me-with-your-render-api-url.onrender.com/chat-hub'
+  apiBaseUrl: 'https://micro-mentorship-api.onrender.com/api',
+  chatHubUrl: 'https://micro-mentorship-api.onrender.com/chat-hub'
 };
