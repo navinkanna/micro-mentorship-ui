@@ -1,6 +1,7 @@
 import { computed, Injectable, signal } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { finalize, Observable, shareReplay, tap } from 'rxjs';
+import { environment } from '../../environments/environment';
 
 export interface UserProfile {
   avatarId: string;
@@ -35,10 +36,10 @@ export class AuthService {
   private readonly accessTokenKey = 'access_Token';
   private readonly refreshTokenKey = 'refresh_Token';
   private readonly emailKey = 'user_email';
-  private readonly apiUrl = '/api/Authorize/login';
-  private readonly registerApiUrl = '/api/Authorize/register';
-  private readonly refreshApiUrl = '/api/Authorize/refresh';
-  private readonly profileApiUrl = '/api/profile';
+  private readonly apiUrl = `${environment.apiBaseUrl}/Authorize/login`;
+  private readonly registerApiUrl = `${environment.apiBaseUrl}/Authorize/register`;
+  private readonly refreshApiUrl = `${environment.apiBaseUrl}/Authorize/refresh`;
+  private readonly profileApiUrl = `${environment.apiBaseUrl}/profile`;
   private readonly authenticated = signal(this.hasStoredSession());
   private readonly currentUserEmail = signal(localStorage.getItem(this.emailKey) ?? '');
   private refreshRequest$: Observable<TokenResponse> | null = null;

@@ -1,6 +1,7 @@
 import { Injectable, signal } from '@angular/core';
 import * as signalR from '@microsoft/signalr';
 import { AuthService } from './auth-service';
+import { environment } from '../../environments/environment';
 
 export type ChatViewState =
   | 'idle'
@@ -153,7 +154,7 @@ export class ChatService {
   private async ensureConnection(): Promise<void> {
     if (!this.connection) {
       this.connection = new signalR.HubConnectionBuilder()
-        .withUrl('/chat-hub', {
+        .withUrl(environment.chatHubUrl, {
           accessTokenFactory: () => this.auth.getAccessToken() ?? ''
         })
         .withAutomaticReconnect()
