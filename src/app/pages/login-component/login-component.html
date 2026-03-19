@@ -1,30 +1,42 @@
-<div class="auth-container">
+<section class="auth-shell">
+  <div class="auth-copy">
+    <p class="eyebrow">MicroMentor Live</p>
+    <h1>Login and get back in.</h1>
+    <div class="auth-highlights">
+      <span>Short chats</span>
+      <span>Professional focus</span>
+      <span>Clean profile</span>
+    </div>
+  </div>
+
+  <div class="auth-card">
+    <p class="card-kicker">Welcome back</p>
     <h2>Login</h2>
-    <!-- <button class="btn btn-linkedin">
-      <img src="assets/linkedin-logo.png" alt="LinkedIn Logo" />
-      Sign in with LinkedIn
-    </button> -->
-  
-    <!-- <p class="divider">or</p> -->
-  
+
     <form [formGroup]="form" (ngSubmit)="submit()">
       <div class="form-group">
-        <label for="email">Email:</label>
-      <input id="email" formControlName="email" type="email" placeholder="Email" />
+        <label for="email">Email</label>
+        <input id="email" formControlName="email" type="email" placeholder="you@company.com" />
       </div>
       @if (form.controls.email.invalid && form.controls.email.touched) {
         <div class="error">
           @if (form.controls.email.errors?.['required']) {
-            <small>Email is required</small>
+            <small>Email is required.</small>
           }
           @if (form.controls.email.errors?.['email']) {
-            <small>Please enter a valid email address</small>
+            <small>Please enter a valid email address.</small>
           }
         </div>
       }
+
       <div class="form-group">
-        <label for="password">Password:</label>
-      <input id="password" formControlName="password"type="password" placeholder="Password" />
+        <label for="password">Password</label>
+        <input
+          id="password"
+          formControlName="password"
+          type="password"
+          placeholder="Enter your password"
+        />
       </div>
       @if (form.controls.password.invalid && form.controls.password.touched) {
         <div class="error">
@@ -37,9 +49,15 @@
         </div>
       }
 
-      <button id="submit" type="submit" class="btn btn-primary">Login</button>
+      @if (errorMessage) {
+        <div class="error-banner">{{ errorMessage }}</div>
+      }
+
+      <button id="submit" type="submit" class="btn-primary" [disabled]="isSubmitting">
+        {{ isSubmitting ? 'Logging in...' : 'Login' }}
+      </button>
     </form>
-  
-    <p>Don't have an account? <a routerLink="/signup">Sign Up</a></p>
+
+    <p class="auth-switch">Don't have an account? <a routerLink="/signup">Sign up</a></p>
   </div>
-  
+</section>

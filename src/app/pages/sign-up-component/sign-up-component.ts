@@ -2,6 +2,7 @@ import { CommonModule } from '@angular/common';
 import { Component } from '@angular/core';
 import { ReactiveFormsModule, FormBuilder, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
+import { AuthService } from '../../services/auth-service';
 
 @Component({
   selector: 'app-sign-up-component',
@@ -12,17 +13,16 @@ import { Router } from '@angular/router';
 })
 export class SignUpComponent {
   isLoading = false;
+  errorMessage = '';
   form: any;
-  private linkedInClientId = '869337zcs01g5k';
-  private redirectUri = 'http://localhost:4200/auth/linkedin/callback';
 
-  constructor(private fb: FormBuilder, private router: Router) {}
+  constructor(private fb: FormBuilder, private router: Router, private auth: AuthService) {}
 
   ngOnInit() {
     this.form = this.fb.group({
-      name: ['', Validators.required],
       email: ['', [Validators.required, Validators.email]],
-      password: ['', [Validators.required, Validators.minLength(6)]]
+      password: ['', [Validators.required, Validators.minLength(6)]],
+      role: ['mentee', Validators.required]
     });
   }
 
@@ -34,29 +34,31 @@ export class SignUpComponent {
     this.router.navigate(['/login']);
   }
 
-  loginWithLinkedIn() {
-    const linkedInAuthUrl = `https://www.linkedin.com/oauth/v2/authorization?response_type=code&client_id=${this.linkedInClientId}&redirect_uri=${encodeURIComponent(this.redirectUri)}&scope=r_liteprofile`;
-    window.location.href = linkedInAuthUrl;
-  }
-
-  async submit() {
+  submit() {
     if (this.form.invalid) {
       this.form.markAllAsTouched();
       return;
     }
 
     this.isLoading = true;
+    this.errorMessage = '';
 
-    try {
-      await new Promise(resolve => setTimeout(resolve, 2000));
-      console.log('Signup successful!', this.form.value);
-      alert('Account created! (Demo)');
-      this.router.navigate(['/login']);
-    } catch (error) {
-      console.error('Signup failed', error);
-      alert('Signup failed! (Demo)');
-    } finally {
-      this.isLoading = false;
-    }
+    const payload = {
+      userName: this.form.value.email,
+      password: this.form.value.password,
+      role: this.form.value.role
+    };
+
+    this.auth.register(payload).subscribe({
+      next: () => {
+        this.isLoading = false;
+        this.router.navigate(['/login']);
+      },
+      error: (error) => {
+        this.isLoading = false;
+        console.error('Signup failed', error);
+        this.errorMessage = 'Could not create account.';
+      }
+    });
   }
 }

@@ -1,0 +1,131 @@
+<div class="chat-page">
+  <nav class="chat-nav">
+    <a routerLink="/home" class="brand">
+      <span class="brand-mark">M</span>
+      <div>
+        <strong>MicroMentor Live</strong>
+        <small>Role-based live matching</small>
+      </div>
+    </a>
+
+    <div class="nav-actions">
+      <button class="btn btn-secondary" type="button" (click)="home()">Home</button>
+      <button class="btn btn-secondary" type="button" (click)="profile()">Profile</button>
+    </div>
+  </nav>
+
+  @if (!auth.isAuthenticated()) {
+    <section class="gate-card">
+      <p class="eyebrow">Sign in required</p>
+      <h1>Log in to start matching.</h1>
+      <p>Live chat needs your account and profile so we can pair mentors with mentees.</p>
+      <div class="cta-row">
+        <a class="btn btn-primary" routerLink="/login">Go to login</a>
+        <a class="btn btn-secondary" routerLink="/signup">Create account</a>
+      </div>
+    </section>
+  } @else {
+    <section class="chat-grid">
+      <aside class="match-panel">
+        <p class="eyebrow">Live matching</p>
+        <h1>Find the next useful conversation.</h1>
+        <p class="status-copy">{{ chat.statusMessage() }}</p>
+
+        <div class="state-chip">{{ chat.state() }}</div>
+
+        <div class="cta-stack">
+          @if (chat.state() === 'idle' || chat.state() === 'ended' || chat.state() === 'error') {
+            <button class="btn btn-primary" type="button" (click)="startChat()">Start chat</button>
+          }
+
+          @if (chat.state() === 'connecting' || chat.state() === 'searching') {
+            <button class="btn btn-secondary" type="button" (click)="cancelSearch()">Cancel search</button>
+          }
+
+          @if (chat.state() === 'matched') {
+            <button class="btn btn-secondary" type="button" (click)="skipChat()">Skip</button>
+            <button class="btn btn-secondary" type="button" (click)="endChat()">End chat</button>
+          }
+        </div>
+
+        @if (chat.partner(); as partner) {
+          <article class="partner-card">
+            <app-avatar-illustration [avatarId]="partner.avatarId" [size]="112"></app-avatar-illustration>
+            <p class="eyebrow">Matched with</p>
+            <h2>{{ partner.firstName || partner.userName }} {{ partner.lastName }}</h2>
+            <span class="role-pill">{{ partner.role }}</span>
+            <p class="partner-headline">{{ partner.headline || 'Ready for a focused conversation.' }}</p>
+            <div class="partner-meta">
+              @if (partner.expertise) {
+                <span>{{ partner.expertise }}</span>
+              }
+              @if (partner.industry) {
+                <span>{{ partner.industry }}</span>
+              }
+            </div>
+            @if (partner.topics) {
+              <div class="topics">
+                @for (topic of partner.topics.split(','); track topic) {
+                  <span>{{ topic.trim() }}</span>
+                }
+              </div>
+            }
+          </article>
+        } @else {
+          <article class="tips-card">
+            <h2>What v1 includes</h2>
+            <p>Authenticated mentor-to-mentee matching, one live conversation, and text chat with skip/end controls.</p>
+          </article>
+        }
+      </aside>
+
+      <section class="conversation-panel">
+        <header class="conversation-header">
+          <div>
+            <p class="eyebrow">Conversation</p>
+            <h2>
+              @if (chat.partner(); as partner) {
+                Chat with {{ partner.firstName || partner.userName }}
+              } @else {
+                Waiting room
+              }
+            </h2>
+          </div>
+        </header>
+
+        <div class="message-list">
+          @if (chat.messages().length) {
+            @for (message of chat.messages(); track message.sentAtUtc + message.senderUserId + message.content) {
+              <article class="message-bubble">
+                <strong>{{ message.senderName }}</strong>
+                <p>{{ message.content }}</p>
+              </article>
+            }
+          } @else {
+            <div class="empty-state">
+              @if (chat.state() === 'matched') {
+                <p>Say hello and kick off the session.</p>
+              } @else {
+                <p>No active chat yet. Start searching when you're ready.</p>
+              }
+            </div>
+          }
+        </div>
+
+        <form class="composer" (ngSubmit)="sendMessage()">
+          <textarea
+            name="message"
+            [(ngModel)]="draftMessage"
+            rows="3"
+            maxlength="1000"
+            placeholder="Share a question, goal, or quick intro..."
+            [disabled]="chat.state() !== 'matched'"
+          ></textarea>
+          <button class="btn btn-primary" type="submit" [disabled]="chat.state() !== 'matched'">
+            Send
+          </button>
+        </form>
+      </section>
+    </section>
+  }
+</div>

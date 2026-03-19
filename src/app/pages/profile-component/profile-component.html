@@ -1,0 +1,171 @@
+<section class="profile-shell">
+  <div class="profile-card">
+    <div class="profile-header">
+      <div>
+        <p class="eyebrow">Profile settings</p>
+        <h1>Your profile</h1>
+      </div>
+      <button type="button" class="btn-secondary" (click)="backHome()">Back to home</button>
+    </div>
+
+    @if (isLoading) {
+      <p class="save-message">Loading profile...</p>
+    }
+
+    <form [formGroup]="form" (ngSubmit)="saveProfile()">
+      <div class="field">
+        <label>Avatar</label>
+        <div class="avatar-preview-row">
+          <div class="avatar-preview">
+            <app-avatar-illustration [avatarId]="selectedAvatarId" [size]="144"></app-avatar-illustration>
+          </div>
+          <button type="button" class="avatar-edit-button" (click)="openAvatarPicker()" aria-label="Edit avatar">
+            <svg viewBox="0 0 24 24" aria-hidden="true">
+              <path
+                d="M4 20h4l10.5-10.5-4-4L4 16v4Zm13.7-12.3 1.6-1.6a1.5 1.5 0 0 0 0-2.1l-.3-.3a1.5 1.5 0 0 0-2.1 0l-1.6 1.6 2.4 2.4Z"
+                fill="currentColor"
+              />
+            </svg>
+            <span>Edit avatar</span>
+          </button>
+        </div>
+      </div>
+
+      <div class="field-grid two-up">
+        <div class="field">
+          <label for="firstName">First name</label>
+          <input id="firstName" type="text" formControlName="firstName" placeholder="Navin" />
+        </div>
+        <div class="field">
+          <label for="lastName">Last name</label>
+          <input id="lastName" type="text" formControlName="lastName" placeholder="Patel" />
+        </div>
+      </div>
+
+      <div class="field-grid two-up">
+        <div class="field">
+          <label for="role">Preferred role</label>
+          <select id="role" formControlName="role">
+            <option value="">Select role</option>
+            <option value="mentee">Mentee</option>
+            <option value="mentor">Mentor</option>
+          </select>
+          @if (form.controls.role.invalid && form.controls.role.touched) {
+            <p class="error-message">Select mentor or mentee.</p>
+          }
+        </div>
+        <div class="field">
+          <label for="industry">Industry</label>
+          <input id="industry" type="text" formControlName="industry" placeholder="SaaS" />
+        </div>
+      </div>
+
+      <div class="field-grid two-up">
+        <div class="field">
+          <label for="company">Company</label>
+          <input id="company" type="text" formControlName="company" placeholder="Acme Labs" />
+        </div>
+        <div class="field">
+          <label for="location">Location</label>
+          <input id="location" type="text" formControlName="location" placeholder="Chicago, IL" />
+        </div>
+      </div>
+
+      <div class="field-grid two-up">
+        <div class="field">
+          <label for="expertise">Expertise</label>
+          <input
+            id="expertise"
+            type="text"
+            formControlName="expertise"
+            placeholder="Angular, UX systems, mentoring"
+          />
+        </div>
+        <div class="field">
+          <label for="yearsOfExperience">Years of experience</label>
+          <input
+            id="yearsOfExperience"
+            type="text"
+            formControlName="yearsOfExperience"
+            placeholder="6"
+          />
+        </div>
+      </div>
+
+      <div class="field">
+        <label for="headline">Headline</label>
+        <input
+          id="headline"
+          type="text"
+          formControlName="headline"
+          placeholder="Building thoughtful interfaces for ambitious teams."
+        />
+      </div>
+
+      <div class="field">
+        <label for="topics">Topics</label>
+        <input
+          id="topics"
+          type="text"
+          formControlName="topics"
+          placeholder="career growth, startup ideas, frontend architecture"
+        />
+      </div>
+
+      <div class="field">
+        <label for="bio">Bio</label>
+        <textarea
+          id="bio"
+          rows="5"
+          formControlName="bio"
+          placeholder="Write 2-3 sentences about your background and the kinds of conversations you want."
+        ></textarea>
+      </div>
+
+      @if (saveMessage) {
+        <p class="save-message">{{ saveMessage }}</p>
+      }
+
+      @if (errorMessage) {
+        <p class="error-message">{{ errorMessage }}</p>
+      }
+
+      <div class="actions">
+        <button type="submit" class="btn-primary" [disabled]="isSaving || isLoading">
+          {{ isSaving ? 'Saving...' : 'Save profile' }}
+        </button>
+      </div>
+    </form>
+  </div>
+</section>
+
+@if (isAvatarPickerOpen) {
+  <div class="avatar-modal-backdrop" (click)="closeAvatarPicker()">
+    <div class="avatar-modal" (click)="$event.stopPropagation()">
+      <div class="avatar-modal-header">
+        <div>
+          <p class="eyebrow">Choose avatar</p>
+          <h2>Pick the one that fits you best</h2>
+        </div>
+        <button type="button" class="avatar-close-button" (click)="closeAvatarPicker()" aria-label="Close avatar picker">
+          <svg viewBox="0 0 24 24" aria-hidden="true">
+            <path d="M6 6 18 18M18 6 6 18" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" />
+          </svg>
+        </button>
+      </div>
+
+      <div class="avatar-grid">
+        @for (avatar of avatars; track avatar.id) {
+          <button
+            type="button"
+            class="avatar-option"
+            [class.active]="selectedAvatarId === avatar.id"
+            (click)="selectAvatar(avatar.id)"
+          >
+            <app-avatar-illustration [avatarId]="avatar.id" [size]="104"></app-avatar-illustration>
+          </button>
+        }
+      </div>
+    </div>
+  </div>
+}

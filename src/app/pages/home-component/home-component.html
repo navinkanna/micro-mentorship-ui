@@ -1,20 +1,133 @@
-<div class="home-hero">
-  <!-- Navbar -->
+<div class="page-shell">
   <nav class="navbar">
-    <div class="logo">Micro-Mentor</div>
-    <div class="nav-links">
-      <button (click)="login()" class="btn btn-outline">Login</button>
-      <button (click)="signup()" class="btn btn-primary">Sign Up</button>
+    <a routerLink="/home" class="brand">
+      <span class="brand-mark">M</span>
+      <div>
+        <strong>MicroMentor Live</strong>
+        <small>Professional chat</small>
+      </div>
+    </a>
+
+    <div class="nav-actions">
+      @if (auth.isAuthenticated()) {
+        <div class="member-pill">
+          <span class="status-dot"></span>
+          <span>{{ auth.userEmail() || 'Signed in' }}</span>
+        </div>
+        <button class="btn btn-secondary" (click)="profile()">Profile</button>
+        <button class="btn btn-secondary" (click)="logout()">Logout</button>
+      } @else {
+        <button (click)="login()" class="btn btn-secondary">Login</button>
+        <button (click)="signup()" class="btn btn-primary">Sign Up</button>
+      }
     </div>
   </nav>
 
-  <!-- Hero Content -->
+  <section class="hero-grid">
+    <div class="hero-copy">
+      <p class="eyebrow">Professional micro chat</p>
+      <h1>Short chats. Real value.</h1>
+      <p class="hero-subtitle">Quick conversations for thoughtful professionals.</p>
 
-    <div class="hero-content">
-      <h1 class="hero-title">Connect with Mentors over Coffee Chats ☕</h1>
-      <p class="hero-subtitle">Short, meaningful mentorship conversations to guide your journey.</p>
-      <div class="hero-buttons">
-        <button (click)="signup()" class="btn btn-primary btn-lg">Get Started</button>
+      <div class="hero-actions">
+      @if (auth.isAuthenticated()) {
+          <button class="btn btn-primary btn-large" (click)="chat()">Start chatting</button>
+          <button class="btn btn-secondary" (click)="previewCard()">Preview your member card</button>
+        } @else {
+          <button (click)="signup()" class="btn btn-primary btn-large">Get Started</button>
+          <button (click)="login()" class="btn btn-ghost">I already have an account</button>
+        }
+      </div>
+
+      <div class="hero-metrics">
+        <article>
+          <strong>10 min</strong>
+          <span>default chat window</span>
+        </article>
+        <article>
+          <strong>Role-first</strong>
+          <span>matching by career lane</span>
+        </article>
+        <article>
+          <strong>Small prompts</strong>
+          <span>to reduce awkward starts</span>
+        </article>
       </div>
     </div>
+
+    <div class="hero-panel">
+      <article class="info-card accent">
+        <p class="card-label">How it works</p>
+        <h2>Simple and focused.</h2>
+        <div class="check-list">
+          @for (note of conversationNotes; track note) {
+            <p>{{ note }}</p>
+          }
+        </div>
+      </article>
+
+      <article class="info-card">
+        <p class="card-label">Who it is for</p>
+        <h2>Built for professionals.</h2>
+        <div class="tag-cloud">
+          <span>Software</span>
+          <span>Design</span>
+          <span>Product</span>
+          <span>Operations</span>
+          <span>Founders</span>
+          <span>Consulting</span>
+        </div>
+      </article>
+    </div>
+  </section>
+
+  @if (isPreviewOpen) {
+    <div class="member-card-overlay" (click)="closePreview()">
+      <section class="member-card-modal" (click)="$event.stopPropagation()">
+        <button class="modal-close" type="button" (click)="closePreview()">Close</button>
+        @if (memberCardProfile) {
+          <div class="member-card">
+            <app-avatar-illustration [avatarId]="memberCardProfile.avatarId" [size]="120"></app-avatar-illustration>
+            <p class="card-label">Member preview</p>
+            <h2>
+              {{ memberCardProfile.firstName || 'New' }}
+              {{ memberCardProfile.lastName || 'Member' }}
+            </h2>
+            <span class="member-role">{{ memberCardProfile.role || 'Professional' }}</span>
+            <p class="member-headline">
+              {{ memberCardProfile.headline || 'Building a clear profile for better conversations.' }}
+            </p>
+            <div class="member-meta">
+              @if (memberCardProfile.expertise) {
+                <span>{{ memberCardProfile.expertise }}</span>
+              }
+              @if (memberCardProfile.industry) {
+                <span>{{ memberCardProfile.industry }}</span>
+              }
+              @if (memberCardProfile.location) {
+                <span>{{ memberCardProfile.location }}</span>
+              }
+            </div>
+            @if (memberCardProfile.bio) {
+              <p class="member-bio">{{ memberCardProfile.bio }}</p>
+            }
+            @if (memberCardProfile.topics) {
+              <div class="member-topics">
+                @for (topic of memberCardProfile.topics.split(','); track topic) {
+                  <span>{{ topic.trim() }}</span>
+                }
+              </div>
+            }
+          </div>
+        } @else {
+          <div class="member-card empty">
+            <p class="card-label">Member preview</p>
+            <h2>Finish your profile</h2>
+            <p class="member-headline">Add your avatar and a few details to see your card.</p>
+            <button class="btn btn-primary" (click)="profile()">Open profile</button>
+          </div>
+        }
+      </section>
+    </div>
+  }
 </div>

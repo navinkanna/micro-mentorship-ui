@@ -2,6 +2,8 @@
 
 # Compiled output
 /dist
+/\.dotnet
+
 /tmp
 /out-tsc
 /bazel-out
