@@ -43,8 +43,28 @@
           @if (form.controls.password.errors?.['required']) {
             <small>Password is required.</small>
           }
-          @if (form.controls.password.errors?.['minlength']) {
-            <small>Password must be at least 6 characters long.</small>
+          @if (form.controls.password.errors?.['passwordStrength']; as passwordStrength) {
+            @if (passwordStrength.includes('minLength')) {
+              <small>Password must be at least 8 characters long.</small>
+            }
+            @if (passwordStrength.includes('maxLength')) {
+              <small>Password must be 128 characters or fewer.</small>
+            }
+            @if (passwordStrength.includes('lowercase')) {
+              <small>Password must include a lowercase letter.</small>
+            }
+            @if (passwordStrength.includes('uppercase')) {
+              <small>Password must include an uppercase letter.</small>
+            }
+            @if (passwordStrength.includes('number')) {
+              <small>Password must include a number.</small>
+            }
+            @if (passwordStrength.includes('specialCharacter')) {
+              <small>Password must include a special character.</small>
+            }
+            @if (passwordStrength.includes('whitespace')) {
+              <small>Password cannot contain spaces.</small>
+            }
           }
         </div>
       }

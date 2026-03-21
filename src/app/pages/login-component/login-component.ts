@@ -3,6 +3,7 @@ import { Component } from '@angular/core';
 import { ReactiveFormsModule, FormBuilder, Validators } from '@angular/forms';
 import { Router, RouterModule } from '@angular/router';
 import { AuthService } from '../../services/auth-service';
+import { strongPasswordValidator } from '../../validators/password-validator';
 
 @Component({
   selector: 'app-login-component',
@@ -21,7 +22,7 @@ export class LoginComponent {
   ngOnInit() {
     this.form = this.fb.group({
       email: ['', [Validators.required, Validators.email]],
-      password: ['', [Validators.required, Validators.minLength(6)]]
+      password: ['', [Validators.required, strongPasswordValidator()]]
     });
   }
 

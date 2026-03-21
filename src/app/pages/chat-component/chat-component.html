@@ -1,7 +1,9 @@
 <div class="chat-page">
   <nav class="chat-nav">
     <a routerLink="/home" class="brand">
-      <span class="brand-mark">M</span>
+      <span class="brand-mark">
+        <img src="assets/Logo.png" alt="MicroMentor Live logo" />
+      </span>
       <div>
         <strong>MicroMentor Live</strong>
         <small>Role-based live matching</small>
@@ -52,7 +54,7 @@
           <article class="partner-card">
             <app-avatar-illustration [avatarId]="partner.avatarId" [size]="112"></app-avatar-illustration>
             <p class="eyebrow">Matched with</p>
-            <h2>{{ partner.firstName || partner.userName }} {{ partner.lastName }}</h2>
+            <h2>{{ getPartnerDisplayName() }}</h2>
             <span class="role-pill">{{ partner.role }}</span>
             <p class="partner-headline">{{ partner.headline || 'Ready for a focused conversation.' }}</p>
             <div class="partner-meta">
@@ -85,7 +87,7 @@
             <p class="eyebrow">Conversation</p>
             <h2>
               @if (chat.partner(); as partner) {
-                Chat with {{ partner.firstName || partner.userName }}
+                Chat with {{ getPartnerDisplayName() }}
               } @else {
                 Waiting room
               }
@@ -97,7 +99,7 @@
           @if (chat.messages().length) {
             @for (message of chat.messages(); track message.sentAtUtc + message.senderUserId + message.content) {
               <article class="message-bubble">
-                <strong>{{ message.senderName }}</strong>
+                <strong>{{ getMessageSenderName(message.senderUserId, message.senderName) }}</strong>
                 <p>{{ message.content }}</p>
               </article>
             }

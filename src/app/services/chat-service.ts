@@ -1,7 +1,9 @@
 import { Injectable, signal } from '@angular/core';
 import * as signalR from '@microsoft/signalr';
-import { AuthService } from './auth-service';
+import { firstValueFrom } from 'rxjs';
+import { AuthService, UserProfile } from './auth-service';
 import { environment } from '../../environments/environment';
+import { getChatDisplayName, getOppositeRole } from '../utils/chat-display-name';
 
 export type ChatViewState =
   | 'idle'
@@ -49,6 +51,7 @@ interface ChatQueueState {
 export class ChatService {
   private connection: signalR.HubConnection | null = null;
   private isConfigured = false;
+  private readonly currentUserProfile = signal<UserProfile | null>(null);
 
   readonly state = signal<ChatViewState>('idle');
   readonly statusMessage = signal('Ready when you are.');
@@ -63,6 +66,7 @@ export class ChatService {
     this.statusMessage.set('Connecting to live chat...');
 
     try {
+      await this.ensureCurrentUserProfile();
       await this.ensureConnection();
       await this.connection?.invoke('JoinQueue');
     } catch (error) {
@@ -181,7 +185,7 @@ export class ChatService {
     });
 
     connection.on('QueueCancelled', (payload: ChatQueueState) => {
-      this.resetToIdle(payload.message || 'Search cancelled.');
+      this.resetToIdle(this.sanitizeStatusMessage(payload.message || 'Search cancelled.'));
     });
 
     connection.on('MatchFound', (payload: ChatMatchFound) => {
@@ -193,12 +197,18 @@ export class ChatService {
     });
 
     connection.on('ReceiveMessage', (payload: ChatMessage) => {
-      this.messages.update((messages) => [...messages, payload]);
+      this.messages.update((messages) => [
+        ...messages,
+        {
+          ...payload,
+          senderName: this.getMessageDisplayName(payload)
+        }
+      ]);
     });
 
     connection.on('ChatEnded', (payload: ChatQueueState) => {
       this.state.set('ended');
-      this.statusMessage.set(payload.message || 'The chat has ended.');
+      this.statusMessage.set(this.sanitizeStatusMessage(payload.message || 'The chat has ended.'));
       this.sessionId.set(null);
       this.partner.set(null);
     });
@@ -251,6 +261,67 @@ export class ChatService {
         : fallbackMessage;
 
     this.state.set('error');
-    this.statusMessage.set(message);
+    this.statusMessage.set(this.sanitizeStatusMessage(message));
+  }
+
+  getParticipantDisplayName(participant: ChatParticipant): string {
+    return getChatDisplayName(participant);
+  }
+
+  getMessageDisplayName(message: ChatMessage): string {
+    const partner = this.partner();
+
+    if (partner && message.senderUserId === partner.userId) {
+      return this.getParticipantDisplayName(partner);
+    }
+
+    const profile = this.currentUserProfile();
+    if (profile) {
+      return getChatDisplayName({
+        userId: message.senderUserId,
+        role: profile.role,
+        firstName: profile.firstName,
+        lastName: profile.lastName
+      });
+    }
+
+    return getChatDisplayName({
+      userId: message.senderUserId,
+      role: getOppositeRole(partner?.role),
+      firstName: '',
+      lastName: ''
+    });
+  }
+
+  private sanitizeStatusMessage(message: string): string {
+    let sanitizedMessage = message;
+    const currentUserEmail = this.auth.userEmail();
+
+    if (currentUserEmail) {
+      sanitizedMessage = sanitizedMessage.replaceAll(currentUserEmail, 'You');
+    }
+
+    const partner = this.partner();
+    if (partner?.userName) {
+      sanitizedMessage = sanitizedMessage.replaceAll(
+        partner.userName,
+        this.getParticipantDisplayName(partner)
+      );
+    }
+
+    return sanitizedMessage;
+  }
+
+  private async ensureCurrentUserProfile(): Promise<void> {
+    if (this.currentUserProfile()) {
+      return;
+    }
+
+    try {
+      const profile = await firstValueFrom(this.auth.getProfile());
+      this.currentUserProfile.set(profile);
+    } catch {
+      this.currentUserProfile.set(null);
+    }
   }
 }

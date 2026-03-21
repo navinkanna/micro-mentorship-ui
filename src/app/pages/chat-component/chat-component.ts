@@ -56,6 +56,21 @@ export class ChatComponent implements OnDestroy {
     this.router.navigate(['/home']);
   }
 
+  getPartnerDisplayName() {
+    const partner = this.chat.partner();
+    return partner ? this.chat.getParticipantDisplayName(partner) : '';
+  }
+
+  getMessageSenderName(senderUserId: number, senderName: string) {
+    return this.chat.getMessageDisplayName({
+      sessionId: this.chat.sessionId() ?? 0,
+      senderUserId,
+      senderName,
+      content: '',
+      sentAtUtc: ''
+    });
+  }
+
   async ngOnDestroy() {
     await this.chat.disconnect();
   }
