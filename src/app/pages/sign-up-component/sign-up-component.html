@@ -6,7 +6,7 @@
     <h1>Get started.</h1>
 
     <form [formGroup]="form" (ngSubmit)="submit()">
-      <input type="email" formControlName="email" placeholder="Work Email" />
+      <input type="email" formControlName="email" placeholder="Email" />
       @if (form.controls.email.invalid && form.controls.email.touched) {
         <p class="error-message">
           @if (form.controls.email.errors?.['required']) {
@@ -17,7 +17,7 @@
         </p>
       }
 
-      <input type="password" formControlName="password" placeholder="Create Password" />
+      <input type="password" formControlName="password" placeholder="Password" />
       @if (form.controls.password.invalid && form.controls.password.touched) {
         <p class="error-message">
           @if (form.controls.password.errors?.['required']) {

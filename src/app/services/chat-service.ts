@@ -4,6 +4,7 @@ import { firstValueFrom } from 'rxjs';
 import { AuthService, UserProfile } from './auth-service';
 import { environment } from '../../environments/environment';
 import { getChatDisplayName, getOppositeRole } from '../utils/chat-display-name';
+import { buildConversationStarterPrompts } from '../utils/conversation-starter-prompts';
 
 export type ChatViewState =
   | 'idle'
@@ -291,6 +292,14 @@ export class ChatService {
       firstName: '',
       lastName: ''
     });
+  }
+
+  getConversationStarterPrompts(): string[] {
+    return buildConversationStarterPrompts(this.currentUserProfile(), this.partner());
+  }
+
+  async preloadCurrentUserProfile(): Promise<void> {
+    await this.ensureCurrentUserProfile();
   }
 
   private sanitizeStatusMessage(message: string): string {

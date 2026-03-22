@@ -272,6 +272,45 @@
   border-top: 1px solid rgba(148, 163, 184, 0.2);
 }
 
+.starter-prompts {
+  display: grid;
+  gap: 0.75rem;
+}
+
+.starter-prompts-label {
+  margin: 0;
+  font-size: 0.82rem;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--color-accent);
+}
+
+.starter-prompt-list {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.75rem;
+}
+
+.starter-prompt {
+  border: 1px solid rgba(230, 126, 34, 0.22);
+  border-radius: 1rem;
+  padding: 0.75rem 0.95rem;
+  background: rgba(255, 247, 237, 0.95);
+  color: var(--color-text);
+  font: inherit;
+  line-height: 1.5;
+  text-align: left;
+  cursor: pointer;
+  transition: transform 0.2s ease, box-shadow 0.2s ease, background 0.2s ease;
+}
+
+.starter-prompt:hover {
+  transform: translateY(-1px);
+  box-shadow: 0 12px 24px rgba(212, 90, 26, 0.12);
+  background: rgba(255, 241, 223, 1);
+}
+
 .composer textarea {
   width: 100%;
   resize: vertical;

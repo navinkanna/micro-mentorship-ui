@@ -1,5 +1,5 @@
 import { CommonModule } from '@angular/common';
-import { AfterViewChecked, Component, ElementRef, OnDestroy, ViewChild } from '@angular/core';
+import { AfterViewChecked, Component, ElementRef, OnDestroy, OnInit, ViewChild } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { Router, RouterModule } from '@angular/router';
 import { AuthService } from '../../services/auth-service';
@@ -13,8 +13,9 @@ import { AvatarIllustrationComponent } from '../../shared/avatar-illustration.co
   templateUrl: './chat-component.html',
   styleUrl: './chat-component.scss'
 })
-export class ChatComponent implements AfterViewChecked, OnDestroy {
+export class ChatComponent implements AfterViewChecked, OnDestroy, OnInit {
   @ViewChild('messageList') private messageListRef?: ElementRef<HTMLDivElement>;
+  @ViewChild('composerInput') private composerInputRef?: ElementRef<HTMLTextAreaElement>;
 
   draftMessage = '';
   private previousMessageCount = 0;
@@ -25,6 +26,10 @@ export class ChatComponent implements AfterViewChecked, OnDestroy {
     public auth: AuthService,
     public chat: ChatService
   ) {}
+
+  async ngOnInit() {
+    await this.chat.preloadCurrentUserProfile();
+  }
 
   async startChat() {
     await this.chat.startSearching();
@@ -72,6 +77,15 @@ export class ChatComponent implements AfterViewChecked, OnDestroy {
   getPartnerDisplayName() {
     const partner = this.chat.partner();
     return partner ? this.chat.getParticipantDisplayName(partner) : '';
+  }
+
+  getStarterPrompts() {
+    return this.chat.getConversationStarterPrompts();
+  }
+
+  useStarterPrompt(prompt: string) {
+    this.draftMessage = prompt;
+    queueMicrotask(() => this.composerInputRef?.nativeElement.focus());
   }
 
   getMessageSenderName(senderUserId: number, senderName: string) {

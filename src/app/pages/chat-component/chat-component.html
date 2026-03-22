@@ -112,7 +112,25 @@
         </div>
 
         <form class="composer" (ngSubmit)="sendMessage()">
+          @if (chat.state() === 'matched' && !chat.messages().length && getStarterPrompts().length) {
+            <div class="starter-prompts">
+              <p class="starter-prompts-label">Conversation starters</p>
+              <div class="starter-prompt-list">
+                @for (prompt of getStarterPrompts(); track prompt) {
+                  <button
+                    class="starter-prompt"
+                    type="button"
+                    (click)="useStarterPrompt(prompt)"
+                  >
+                    {{ prompt }}
+                  </button>
+                }
+              </div>
+            </div>
+          }
+
           <textarea
+            #composerInput
             name="message"
             [(ngModel)]="draftMessage"
             (keydown)="handleComposerKeydown($event)"
