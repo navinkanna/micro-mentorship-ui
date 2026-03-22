@@ -1,5 +1,5 @@
 import { CommonModule } from '@angular/common';
-import { Component, OnDestroy } from '@angular/core';
+import { AfterViewChecked, Component, ElementRef, OnDestroy, ViewChild } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { Router, RouterModule } from '@angular/router';
 import { AuthService } from '../../services/auth-service';
@@ -13,8 +13,12 @@ import { AvatarIllustrationComponent } from '../../shared/avatar-illustration.co
   templateUrl: './chat-component.html',
   styleUrl: './chat-component.scss'
 })
-export class ChatComponent implements OnDestroy {
+export class ChatComponent implements AfterViewChecked, OnDestroy {
+  @ViewChild('messageList') private messageListRef?: ElementRef<HTMLDivElement>;
+
   draftMessage = '';
+  private previousMessageCount = 0;
+  private previousState = '';
 
   constructor(
     private router: Router,
@@ -38,6 +42,15 @@ export class ChatComponent implements OnDestroy {
 
     await this.chat.sendMessage(message);
     this.draftMessage = '';
+  }
+
+  async handleComposerKeydown(event: KeyboardEvent) {
+    if (event.key !== 'Enter' || event.shiftKey) {
+      return;
+    }
+
+    event.preventDefault();
+    await this.sendMessage();
   }
 
   async endChat() {
@@ -69,6 +82,31 @@ export class ChatComponent implements OnDestroy {
       content: '',
       sentAtUtc: ''
     });
+  }
+
+  isOwnMessage(senderUserId: number) {
+    const partner = this.chat.partner();
+    return partner ? senderUserId !== partner.userId : false;
+  }
+
+  ngAfterViewChecked() {
+    const messageCount = this.chat.messages().length;
+    const state = this.chat.state();
+
+    if (messageCount !== this.previousMessageCount || state !== this.previousState) {
+      this.previousMessageCount = messageCount;
+      this.previousState = state;
+      this.scrollMessagesToBottom();
+    }
+  }
+
+  private scrollMessagesToBottom() {
+    const messageList = this.messageListRef?.nativeElement;
+    if (!messageList) {
+      return;
+    }
+
+    messageList.scrollTop = messageList.scrollHeight;
   }
 
   async ngOnDestroy() {

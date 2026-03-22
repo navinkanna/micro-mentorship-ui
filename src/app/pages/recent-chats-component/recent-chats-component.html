@@ -1,0 +1,60 @@
+<section class="recent-page">
+  <section class="recent-modal">
+    <nav class="recent-nav">
+      <a routerLink="/home" class="brand">
+        <span class="brand-mark">
+          <img src="assets/Logo.png" alt="MicroMentor Live logo" />
+        </span>
+        <div>
+          <strong>Micro-Mentor</strong>
+          <small>Conversation history</small>
+        </div>
+      </a>
+
+      <div class="nav-actions">
+        <button class="btn btn-secondary" type="button" (click)="home()">Home</button>
+        <button class="btn btn-primary" type="button" (click)="chat()">Start chat</button>
+      </div>
+    </nav>
+
+    <header class="page-header">
+      <p class="eyebrow">Recent chats</p>
+      <h1>Your last 10 conversations</h1>
+      <p class="page-subtitle">Open a conversation row to review the transcript. We only keep the latest 10 per member.</p>
+    </header>
+
+    @if (isLoading) {
+      <section class="empty-card">
+        <p>Loading recent chats...</p>
+      </section>
+    } @else if (recentChats.length) {
+      <section class="recent-list">
+        @for (chat of recentChats; track chat.sessionId) {
+          <button class="recent-row" type="button" (click)="openTranscript(chat.sessionId)">
+            <div class="recent-row-main">
+              <app-avatar-illustration [avatarId]="chat.partnerAvatarId" [size]="58"></app-avatar-illustration>
+              <div class="identity-block">
+                <div class="identity-line">
+                  <h2>{{ getPartnerDisplayName(chat) }}</h2>
+                  <span class="role-pill">{{ chat.partnerRole || 'Professional' }}</span>
+                </div>
+                <p class="preview">{{ chat.lastMessagePreview || 'No messages were sent in this chat.' }}</p>
+              </div>
+            </div>
+
+            <div class="meta-column">
+              <span>{{ chat.messageCount }} messages</span>
+              <span>{{ (chat.endedAtUtc || chat.lastMessageSentAtUtc || chat.startedAtUtc) | date: 'mediumDate' }}</span>
+            </div>
+          </button>
+        }
+      </section>
+    } @else {
+      <section class="empty-card">
+        <h2>No recent chats yet</h2>
+        <p>Your last 10 completed conversations will show up here once you start matching.</p>
+        <button class="btn btn-primary" type="button" (click)="chat()">Start chatting</button>
+      </section>
+    }
+  </section>
+</section>

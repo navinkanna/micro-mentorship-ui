@@ -1,11 +1,23 @@
 :root {
   --font-body: 'Manrope', 'Segoe UI', sans-serif;
   --font-display: 'Space Grotesk', 'Segoe UI', sans-serif;
-  --color-text: #0f172a;
-  --color-muted: #475569;
-  --color-accent: #1d4ed8;
-  --color-border: rgba(148, 163, 184, 0.24);
+  --color-text: #0d2030;
+  --color-muted: #536577;
+  --color-accent: #e67e22;
+  --color-accent-strong: #c45a12;
+  --color-accent-ink: #0c7f86;
+  --color-accent-soft: #fff1df;
+  --color-border: rgba(76, 111, 130, 0.22);
   --shadow-soft: 0 24px 70px rgba(15, 23, 42, 0.1);
+  --gradient-brand: linear-gradient(135deg, #f6a03d, #e67e22 52%, #d45a1a);
+  --gradient-background:
+    radial-gradient(circle at top left, rgba(246, 160, 61, 0.18), transparent 28%),
+    radial-gradient(circle at top right, rgba(22, 166, 161, 0.16), transparent 32%),
+    linear-gradient(180deg, #fff8ef 0%, #eef7f8 52%, #fbfcfd 100%);
+  --focus-ring: rgba(230, 126, 34, 0.16);
+  --focus-border: rgba(230, 126, 34, 0.46);
+  --surface-highlight: rgba(22, 166, 161, 0.12);
+  --surface-accent: rgba(230, 126, 34, 0.12);
 }
 
 *,
@@ -23,10 +35,7 @@ body {
 body {
   font-family: var(--font-body);
   color: var(--color-text);
-  background:
-    radial-gradient(circle at top left, rgba(20, 184, 166, 0.22), transparent 28%),
-    radial-gradient(circle at top right, rgba(59, 130, 246, 0.2), transparent 32%),
-    linear-gradient(180deg, #f8fbff 0%, #eef4ff 45%, #f8fafc 100%);
+  background: var(--gradient-background);
   overflow-x: hidden;
 }
 
@@ -45,7 +54,7 @@ body::before {
   left: -4rem;
   width: 14rem;
   height: 14rem;
-  background: rgba(45, 212, 191, 0.14);
+  background: rgba(246, 160, 61, 0.15);
 }
 
 body::after {
@@ -53,7 +62,7 @@ body::after {
   bottom: 8%;
   width: 16rem;
   height: 16rem;
-  background: rgba(29, 78, 216, 0.14);
+  background: rgba(22, 166, 161, 0.14);
 }
 
 button,

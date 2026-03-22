@@ -3,6 +3,7 @@
 # Compiled output
 /dist
 /\.dotnet
+/\.dotnetbuild
 
 /tmp
 /out-tsc

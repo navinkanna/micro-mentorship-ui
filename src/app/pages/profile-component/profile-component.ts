@@ -1,7 +1,7 @@
 import { CommonModule } from '@angular/common';
 import { Component } from '@angular/core';
 import { FormBuilder, ReactiveFormsModule, Validators } from '@angular/forms';
-import { Router } from '@angular/router';
+import { Router, RouterModule } from '@angular/router';
 import { AuthService, UserProfile } from '../../services/auth-service';
 import { AvatarIllustrationComponent } from '../../shared/avatar-illustration.component';
 import { avatarOptions } from '../../shared/avatar-options';
@@ -9,7 +9,7 @@ import { avatarOptions } from '../../shared/avatar-options';
 @Component({
   selector: 'app-profile-component',
   standalone: true,
-  imports: [CommonModule, ReactiveFormsModule, AvatarIllustrationComponent],
+  imports: [CommonModule, ReactiveFormsModule, RouterModule, AvatarIllustrationComponent],
   templateUrl: './profile-component.html',
   styleUrl: './profile-component.scss'
 })
@@ -60,6 +60,10 @@ export class ProfileComponent {
 
   backHome() {
     this.router.navigate(['/home']);
+  }
+
+  chat() {
+    this.router.navigate(['/chat']);
   }
 
   selectAvatar(avatarId: string) {

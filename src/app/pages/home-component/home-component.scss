@@ -1,6 +1,6 @@
 .page-shell {
   min-height: 100vh;
-  padding: 1.5rem 5vw 4rem;
+  padding: 0.75rem 5vw 4rem;
 }
 
 .navbar {
@@ -8,7 +8,7 @@
   align-items: center;
   justify-content: space-between;
   gap: 1rem;
-  padding: 1rem 0 1.5rem;
+  padding: 0.5rem 0 1rem;
 }
 
 .brand {
@@ -26,7 +26,7 @@
   height: 2.8rem;
   border-radius: 0.95rem;
   background: rgba(255, 255, 255, 0.82);
-  box-shadow: 0 16px 30px rgba(29, 78, 216, 0.28);
+  box-shadow: 0 16px 30px rgba(230, 126, 34, 0.18);
   overflow: hidden;
 }
 
@@ -79,8 +79,8 @@
   width: 0.6rem;
   height: 0.6rem;
   border-radius: 999px;
-  background: #14b8a6;
-  box-shadow: 0 0 0 6px rgba(20, 184, 166, 0.15);
+  background: var(--color-accent-ink);
+  box-shadow: 0 0 0 6px var(--surface-highlight);
 }
 
 .hero-grid,
@@ -91,8 +91,8 @@
 
 .hero-grid {
   grid-template-columns: 1.2fr 0.8fr;
-  align-items: center;
-  margin-top: 1rem;
+  align-items: start;
+  margin-top: 0.25rem;
 }
 
 .hero-copy {
@@ -123,7 +123,6 @@
 }
 
 .hero-actions,
-.hero-metrics,
 .tag-cloud {
   display: flex;
   flex-wrap: wrap;
@@ -149,9 +148,9 @@
 }
 
 .btn-primary {
-  background: linear-gradient(135deg, #0f766e, #1d4ed8);
+  background: var(--gradient-brand);
   color: #f8fafc;
-  box-shadow: 0 20px 36px rgba(29, 78, 216, 0.24);
+  box-shadow: 0 20px 36px rgba(212, 90, 26, 0.22);
 }
 
 .btn-secondary,
@@ -166,11 +165,6 @@
   padding-inline: 1.6rem;
 }
 
-.hero-metrics {
-  margin-top: 2rem;
-}
-
-.hero-metrics article,
 .hero-panel,
 .info-card,
 .profile-prompt-card {
@@ -178,18 +172,6 @@
   background: rgba(255, 255, 255, 0.72);
   backdrop-filter: blur(18px);
   box-shadow: var(--shadow-soft);
-}
-
-.hero-metrics article {
-  min-width: 10rem;
-  padding: 1rem 1.1rem;
-  border-radius: 1.2rem;
-}
-
-.hero-metrics strong {
-  display: block;
-  font-size: 1.2rem;
-  color: var(--color-text);
 }
 
 .hero-panel {
@@ -211,7 +193,7 @@
 }
 
 .info-card.accent {
-  background: linear-gradient(160deg, rgba(255, 255, 255, 0.78), rgba(219, 234, 254, 0.82));
+  background: linear-gradient(160deg, rgba(255, 255, 255, 0.82), rgba(223, 242, 242, 0.88));
 }
 
 .check-list {
@@ -282,7 +264,7 @@
 .member-role {
   padding: 0.45rem 0.85rem;
   border-radius: 999px;
-  background: rgba(29, 78, 216, 0.08);
+  background: var(--surface-accent);
   color: var(--color-accent);
   font-weight: 700;
   text-transform: capitalize;

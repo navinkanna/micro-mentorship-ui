@@ -29,9 +29,11 @@
   } @else {
     <section class="chat-grid">
       <aside class="match-panel">
-        <p class="eyebrow">Live matching</p>
-        <h1>Find the next useful conversation.</h1>
-        <p class="status-copy">{{ chat.statusMessage() }}</p>
+        @if (chat.state() !== 'matched') {
+          <p class="eyebrow">Live matching</p>
+          <h1>Find the next useful conversation.</h1>
+          <p class="status-copy">{{ chat.statusMessage() }}</p>
+        }
 
         <div class="state-chip">{{ chat.state() }}</div>
 
@@ -73,11 +75,6 @@
               </div>
             }
           </article>
-        } @else {
-          <article class="tips-card">
-            <h2>What v1 includes</h2>
-            <p>Authenticated mentor-to-mentee matching, one live conversation, and text chat with skip/end controls.</p>
-          </article>
         }
       </aside>
 
@@ -95,10 +92,10 @@
           </div>
         </header>
 
-        <div class="message-list">
+        <div class="message-list" #messageList>
           @if (chat.messages().length) {
             @for (message of chat.messages(); track message.sentAtUtc + message.senderUserId + message.content) {
-              <article class="message-bubble">
+              <article class="message-bubble" [class.own-message]="isOwnMessage(message.senderUserId)">
                 <strong>{{ getMessageSenderName(message.senderUserId, message.senderName) }}</strong>
                 <p>{{ message.content }}</p>
               </article>
@@ -118,7 +115,8 @@
           <textarea
             name="message"
             [(ngModel)]="draftMessage"
-            rows="3"
+            (keydown)="handleComposerKeydown($event)"
+            rows="2"
             maxlength="1000"
             placeholder="Share a question, goal, or quick intro..."
             [disabled]="chat.state() !== 'matched'"

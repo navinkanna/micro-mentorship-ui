@@ -48,10 +48,13 @@
         </p>
       }
 
-      <select formControlName="role">
-        <option value="mentee">Mentee</option>
-        <option value="mentor">Mentor</option>
-      </select>
+      <div class="select-wrap">
+        <select formControlName="role" aria-label="Choose role">
+          <option value="mentee">Mentee</option>
+          <option value="mentor">Mentor</option>
+        </select>
+        <span class="select-arrow" aria-hidden="true"></span>
+      </div>
 
       @if (errorMessage) {
         <p class="error-message">{{ errorMessage }}</p>
