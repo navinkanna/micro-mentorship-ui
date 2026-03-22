@@ -1,5 +1,5 @@
 import { CommonModule } from '@angular/common';
-import { AfterViewChecked, Component, ElementRef, OnDestroy, OnInit, ViewChild } from '@angular/core';
+import { AfterViewChecked, Component, ElementRef, OnInit, ViewChild } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { Router, RouterModule } from '@angular/router';
 import { AuthService } from '../../services/auth-service';
@@ -14,7 +14,7 @@ import { AvatarIllustrationComponent } from '../../shared/avatar-illustration.co
   templateUrl: './chat-component.html',
   styleUrl: './chat-component.scss'
 })
-export class ChatComponent implements AfterViewChecked, OnDestroy, OnInit {
+export class ChatComponent implements AfterViewChecked, OnInit {
   @ViewChild('messageList') private messageListRef?: ElementRef<HTMLDivElement>;
   @ViewChild('composerInput') private composerInputRef?: ElementRef<HTMLTextAreaElement>;
 
@@ -150,9 +150,5 @@ export class ChatComponent implements AfterViewChecked, OnDestroy, OnInit {
     }
 
     messageList.scrollTop = messageList.scrollHeight;
-  }
-
-  async ngOnDestroy() {
-    await this.chat.disconnect();
   }
 }
