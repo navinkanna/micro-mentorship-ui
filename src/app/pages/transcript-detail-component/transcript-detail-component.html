@@ -1,0 +1,57 @@
+<section class="transcript-page">
+  <nav class="transcript-nav">
+    <button class="btn btn-secondary" type="button" (click)="backToRecentChats()">Back to recent chats</button>
+  </nav>
+
+  @if (isLoading) {
+    <section class="transcript-shell empty-shell">
+      <p>Loading transcript...</p>
+    </section>
+  } @else if (transcript) {
+    <section class="transcript-shell">
+      <aside class="transcript-sidebar">
+        <app-avatar-illustration [avatarId]="transcript.partnerAvatarId" [size]="112"></app-avatar-illustration>
+        <p class="eyebrow">Transcript with</p>
+        <h1>{{ getPartnerDisplayName() }}</h1>
+        <span class="role-pill">{{ transcript.partnerRole || 'Professional' }}</span>
+        <p class="headline">{{ transcript.partnerHeadline || 'Focused conversation partner.' }}</p>
+        <div class="meta-stack">
+          <span>Started {{ transcript.startedAtUtc | date: 'medium' }}</span>
+          @if (transcript.endedAtUtc) {
+            <span>Ended {{ transcript.endedAtUtc | date: 'medium' }}</span>
+          }
+          <span>{{ transcript.messages.length }} messages</span>
+        </div>
+      </aside>
+
+      <section class="transcript-panel">
+        <header class="panel-header">
+          <p class="eyebrow">Conversation history</p>
+          <h2>Conversation history</h2>
+        </header>
+
+        <div class="message-list">
+          @if (transcript.messages.length) {
+            @for (message of transcript.messages; track message.sentAtUtc + message.senderUserId + message.content) {
+              <article class="message-bubble" [class.own-message]="isOwnMessage(message)">
+                <strong>{{ getMessageSenderName(message) }}</strong>
+                <p>{{ message.content }}</p>
+                <small>{{ message.sentAtUtc | date: 'medium' }}</small>
+              </article>
+            }
+          } @else {
+            <div class="empty-state">
+              <p>No messages were sent in this conversation.</p>
+            </div>
+          }
+        </div>
+      </section>
+    </section>
+  } @else {
+    <section class="transcript-shell empty-shell">
+      <h2>Transcript unavailable</h2>
+      <p>We could not find that recent chat.</p>
+      <button class="btn btn-primary" type="button" (click)="backToRecentChats()">Return to recent chats</button>
+    </section>
+  }
+</section>

@@ -22,16 +22,39 @@
         <p class="error-message">
           @if (form.controls.password.errors?.['required']) {
             Password is required.
-          } @else if (form.controls.password.errors?.['minlength']) {
-            Password must be at least 6 characters.
+          } @else if (form.controls.password.errors?.['passwordStrength']; as passwordStrength) {
+            @if (passwordStrength.includes('minLength')) {
+              Password must be at least 8 characters.
+            }
+            @if (passwordStrength.includes('maxLength')) {
+              Password must be 128 characters or fewer.
+            }
+            @if (passwordStrength.includes('lowercase')) {
+              Password must include a lowercase letter.
+            }
+            @if (passwordStrength.includes('uppercase')) {
+              Password must include an uppercase letter.
+            }
+            @if (passwordStrength.includes('number')) {
+              Password must include a number.
+            }
+            @if (passwordStrength.includes('specialCharacter')) {
+              Password must include a special character.
+            }
+            @if (passwordStrength.includes('whitespace')) {
+              Password cannot contain spaces.
+            }
           }
         </p>
       }
 
-      <select formControlName="role">
-        <option value="mentee">Mentee</option>
-        <option value="mentor">Mentor</option>
-      </select>
+      <div class="select-wrap">
+        <select formControlName="role" aria-label="Choose role">
+          <option value="mentee">Mentee</option>
+          <option value="mentor">Mentor</option>
+        </select>
+        <span class="select-arrow" aria-hidden="true"></span>
+      </div>
 
       @if (errorMessage) {
         <p class="error-message">{{ errorMessage }}</p>

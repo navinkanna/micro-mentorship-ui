@@ -1,8 +1,10 @@
 import { CommonModule } from '@angular/common';
 import { Component } from '@angular/core';
+import { HttpErrorResponse } from '@angular/common/http';
 import { ReactiveFormsModule, FormBuilder, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
 import { AuthService } from '../../services/auth-service';
+import { strongPasswordValidator } from '../../validators/password-validator';
 
 @Component({
   selector: 'app-sign-up-component',
@@ -21,7 +23,7 @@ export class SignUpComponent {
   ngOnInit() {
     this.form = this.fb.group({
       email: ['', [Validators.required, Validators.email]],
-      password: ['', [Validators.required, Validators.minLength(6)]],
+      password: ['', [Validators.required, strongPasswordValidator()]],
       role: ['mentee', Validators.required]
     });
   }
@@ -57,6 +59,16 @@ export class SignUpComponent {
       error: (error) => {
         this.isLoading = false;
         console.error('Signup failed', error);
+
+        if (
+          error instanceof HttpErrorResponse &&
+          error.status === 409 &&
+          typeof error.error === 'string'
+        ) {
+          this.errorMessage = error.error;
+          return;
+        }
+
         this.errorMessage = 'Could not create account.';
       }
     });

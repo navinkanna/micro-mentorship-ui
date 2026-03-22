@@ -29,18 +29,23 @@
   width: 2.8rem;
   height: 2.8rem;
   border-radius: 0.95rem;
-  background: linear-gradient(135deg, #0f766e, #1d4ed8);
-  color: white;
-  font-weight: 700;
-  box-shadow: 0 16px 30px rgba(29, 78, 216, 0.28);
+  background: rgba(255, 255, 255, 0.82);
+  box-shadow: 0 16px 30px rgba(230, 126, 34, 0.18);
+  overflow: hidden;
+}
+
+.brand-mark img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
 }
 
 .brand strong,
 .match-panel h1,
 .gate-card h1,
 .conversation-header h2,
-.partner-card h2,
-.tips-card h2 {
+.partner-card h2 {
   font-family: var(--font-display);
 }
 
@@ -52,7 +57,6 @@
 .brand small,
 .status-copy,
 .partner-headline,
-.tips-card p,
 .empty-state,
 .gate-card p {
   color: var(--color-muted);
@@ -86,9 +90,9 @@
 }
 
 .btn-primary {
-  background: linear-gradient(135deg, #0f766e, #1d4ed8);
+  background: var(--gradient-brand);
   color: #f8fafc;
-  box-shadow: 0 20px 36px rgba(29, 78, 216, 0.24);
+  box-shadow: 0 20px 36px rgba(212, 90, 26, 0.22);
 }
 
 .btn-secondary {
@@ -101,8 +105,7 @@
 .gate-card,
 .match-panel,
 .conversation-panel,
-.partner-card,
-.tips-card {
+.partner-card {
   border: 1px solid var(--color-border);
   background: rgba(255, 255, 255, 0.76);
   backdrop-filter: blur(18px);
@@ -118,13 +121,17 @@
 
 .chat-grid {
   grid-template-columns: minmax(320px, 420px) minmax(0, 1fr);
-  align-items: start;
+  align-items: stretch;
 }
 
 .match-panel,
 .conversation-panel {
   padding: 1.5rem;
   border-radius: 2rem;
+}
+
+.match-panel {
+  align-self: start;
 }
 
 .eyebrow {
@@ -152,7 +159,7 @@
   width: fit-content;
   padding: 0.5rem 0.9rem;
   border-radius: 999px;
-  background: rgba(29, 78, 216, 0.08);
+  background: var(--surface-accent);
   color: var(--color-accent);
   font-weight: 700;
   text-transform: capitalize;
@@ -162,13 +169,11 @@
   margin-top: 1.4rem;
 }
 
-.partner-card,
-.tips-card {
+.partner-card {
   margin-top: 1.5rem;
   padding: 1.25rem;
   border-radius: 1.5rem;
 }
-
 .partner-card {
   display: grid;
   justify-items: center;
@@ -177,8 +182,7 @@
 }
 
 .partner-card h2,
-.conversation-header h2,
-.tips-card h2 {
+.conversation-header h2 {
   margin: 0;
   color: var(--color-text);
 }
@@ -202,9 +206,11 @@
 }
 
 .conversation-panel {
-  min-height: 70vh;
+  height: 88vh;
+  max-height: 88vh;
   display: grid;
   grid-template-rows: auto 1fr auto;
+  overflow: hidden;
 }
 
 .conversation-header {
@@ -216,16 +222,27 @@
   display: grid;
   align-content: start;
   gap: 0.9rem;
-  min-height: 22rem;
+  min-height: 0;
   padding: 1.25rem 0;
+  overflow-y: auto;
+  overscroll-behavior: contain;
+  padding-right: 0.35rem;
 }
 
 .message-bubble {
   max-width: min(75%, 38rem);
   padding: 0.9rem 1rem;
   border-radius: 1.2rem 1.2rem 1.2rem 0.35rem;
-  background: rgba(219, 234, 254, 0.78);
-  border: 1px solid rgba(59, 130, 246, 0.14);
+  background: rgba(223, 242, 242, 0.82);
+  border: 1px solid rgba(31, 110, 169, 0.16);
+  justify-self: start;
+}
+
+.message-bubble.own-message {
+  justify-self: end;
+  border-radius: 1.2rem 1.2rem 0.35rem 1.2rem;
+  background: rgba(255, 241, 223, 0.92);
+  border-color: rgba(230, 126, 34, 0.18);
 }
 
 .message-bubble strong {
@@ -258,7 +275,7 @@
 .composer textarea {
   width: 100%;
   resize: vertical;
-  min-height: 7.5rem;
+  min-height: 5rem;
   border-radius: 1.2rem;
   border: 1px solid rgba(148, 163, 184, 0.28);
   padding: 1rem;
@@ -268,8 +285,8 @@
 }
 
 .composer textarea:focus {
-  outline: 2px solid rgba(29, 78, 216, 0.2);
-  border-color: rgba(29, 78, 216, 0.3);
+  outline: 2px solid var(--focus-ring);
+  border-color: var(--focus-border);
 }
 
 @media (max-width: 980px) {
@@ -280,6 +297,11 @@
   .chat-nav,
   .chat-grid {
     grid-template-columns: 1fr;
+  }
+
+  .conversation-panel {
+    height: 82vh;
+    max-height: 82vh;
   }
 }
 

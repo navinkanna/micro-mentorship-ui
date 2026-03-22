@@ -1,7 +1,9 @@
 <div class="chat-page">
   <nav class="chat-nav">
     <a routerLink="/home" class="brand">
-      <span class="brand-mark">M</span>
+      <span class="brand-mark">
+        <img src="assets/Logo.png" alt="MicroMentor Live logo" />
+      </span>
       <div>
         <strong>MicroMentor Live</strong>
         <small>Role-based live matching</small>
@@ -27,9 +29,11 @@
   } @else {
     <section class="chat-grid">
       <aside class="match-panel">
-        <p class="eyebrow">Live matching</p>
-        <h1>Find the next useful conversation.</h1>
-        <p class="status-copy">{{ chat.statusMessage() }}</p>
+        @if (chat.state() !== 'matched') {
+          <p class="eyebrow">Live matching</p>
+          <h1>Find the next useful conversation.</h1>
+          <p class="status-copy">{{ chat.statusMessage() }}</p>
+        }
 
         <div class="state-chip">{{ chat.state() }}</div>
 
@@ -52,7 +56,7 @@
           <article class="partner-card">
             <app-avatar-illustration [avatarId]="partner.avatarId" [size]="112"></app-avatar-illustration>
             <p class="eyebrow">Matched with</p>
-            <h2>{{ partner.firstName || partner.userName }} {{ partner.lastName }}</h2>
+            <h2>{{ getPartnerDisplayName() }}</h2>
             <span class="role-pill">{{ partner.role }}</span>
             <p class="partner-headline">{{ partner.headline || 'Ready for a focused conversation.' }}</p>
             <div class="partner-meta">
@@ -71,11 +75,6 @@
               </div>
             }
           </article>
-        } @else {
-          <article class="tips-card">
-            <h2>What v1 includes</h2>
-            <p>Authenticated mentor-to-mentee matching, one live conversation, and text chat with skip/end controls.</p>
-          </article>
         }
       </aside>
 
@@ -85,7 +84,7 @@
             <p class="eyebrow">Conversation</p>
             <h2>
               @if (chat.partner(); as partner) {
-                Chat with {{ partner.firstName || partner.userName }}
+                Chat with {{ getPartnerDisplayName() }}
               } @else {
                 Waiting room
               }
@@ -93,11 +92,11 @@
           </div>
         </header>
 
-        <div class="message-list">
+        <div class="message-list" #messageList>
           @if (chat.messages().length) {
             @for (message of chat.messages(); track message.sentAtUtc + message.senderUserId + message.content) {
-              <article class="message-bubble">
-                <strong>{{ message.senderName }}</strong>
+              <article class="message-bubble" [class.own-message]="isOwnMessage(message.senderUserId)">
+                <strong>{{ getMessageSenderName(message.senderUserId, message.senderName) }}</strong>
                 <p>{{ message.content }}</p>
               </article>
             }
@@ -116,7 +115,8 @@
           <textarea
             name="message"
             [(ngModel)]="draftMessage"
-            rows="3"
+            (keydown)="handleComposerKeydown($event)"
+            rows="2"
             maxlength="1000"
             placeholder="Share a question, goal, or quick intro..."
             [disabled]="chat.state() !== 'matched'"

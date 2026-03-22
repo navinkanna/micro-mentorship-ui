@@ -1,9 +1,11 @@
 <div class="page-shell">
   <nav class="navbar">
     <a routerLink="/home" class="brand">
-      <span class="brand-mark">M</span>
+      <span class="brand-mark">
+        <img src="assets/Logo.png" alt="MicroMentor Live logo" />
+      </span>
       <div>
-        <strong>MicroMentor Live</strong>
+        <strong>Micro-Mentor</strong>
         <small>Professional chat</small>
       </div>
     </a>
@@ -14,6 +16,7 @@
           <span class="status-dot"></span>
           <span>{{ auth.userEmail() || 'Signed in' }}</span>
         </div>
+        <button class="btn btn-secondary" (click)="recentChatsPage()">Recent chats</button>
         <button class="btn btn-secondary" (click)="profile()">Profile</button>
         <button class="btn btn-secondary" (click)="logout()">Logout</button>
       } @else {
@@ -37,21 +40,6 @@
           <button (click)="signup()" class="btn btn-primary btn-large">Get Started</button>
           <button (click)="login()" class="btn btn-ghost">I already have an account</button>
         }
-      </div>
-
-      <div class="hero-metrics">
-        <article>
-          <strong>10 min</strong>
-          <span>default chat window</span>
-        </article>
-        <article>
-          <strong>Role-first</strong>
-          <span>matching by career lane</span>
-        </article>
-        <article>
-          <strong>Small prompts</strong>
-          <span>to reduce awkward starts</span>
-        </article>
       </div>
     </div>
 

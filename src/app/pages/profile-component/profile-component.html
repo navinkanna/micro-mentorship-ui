@@ -1,11 +1,27 @@
 <section class="profile-shell">
   <div class="profile-card">
+    <nav class="profile-nav">
+      <a routerLink="/home" class="brand">
+        <span class="brand-mark">
+          <img src="assets/Logo.png" alt="MicroMentor Live logo" />
+        </span>
+        <div>
+          <strong>Micro-Mentor</strong>
+          <small>Profile settings</small>
+        </div>
+      </a>
+
+      <div class="nav-actions">
+        <button type="button" class="btn-secondary" (click)="backHome()">Home</button>
+        <button type="button" class="btn-primary" (click)="chat()">Start chat</button>
+      </div>
+    </nav>
+
     <div class="profile-header">
       <div>
         <p class="eyebrow">Profile settings</p>
         <h1>Your profile</h1>
       </div>
-      <button type="button" class="btn-secondary" (click)="backHome()">Back to home</button>
     </div>
 
     @if (isLoading) {
@@ -16,9 +32,7 @@
       <div class="field">
         <label>Avatar</label>
         <div class="avatar-preview-row">
-          <div class="avatar-preview">
-            <app-avatar-illustration [avatarId]="selectedAvatarId" [size]="144"></app-avatar-illustration>
-          </div>
+          <app-avatar-illustration [avatarId]="selectedAvatarId" [size]="148"></app-avatar-illustration>
           <button type="button" class="avatar-edit-button" (click)="openAvatarPicker()" aria-label="Edit avatar">
             <svg viewBox="0 0 24 24" aria-hidden="true">
               <path

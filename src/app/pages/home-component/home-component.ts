@@ -35,6 +35,10 @@ export class HomeComponent {
     this.router.navigate(['/profile']);
   }
 
+  recentChatsPage() {
+    this.router.navigate(['/recent-chats']);
+  }
+
   chat() {
     this.router.navigate(['/chat']);
   }
