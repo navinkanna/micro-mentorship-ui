@@ -33,7 +33,7 @@
       <p class="hero-subtitle">Quick conversations for thoughtful professionals.</p>
 
       <div class="hero-actions">
-      @if (auth.isAuthenticated()) {
+        @if (auth.isAuthenticated()) {
           <button class="btn btn-primary btn-large" (click)="chat()">Start chatting</button>
           <button class="btn btn-secondary" (click)="previewCard()">Preview your member card</button>
         } @else {
@@ -76,12 +76,22 @@
         @if (memberCardProfile) {
           <div class="member-card">
             <app-avatar-illustration [avatarId]="memberCardProfile.avatarId" [size]="120"></app-avatar-illustration>
-            <p class="card-label">Member preview</p>
             <h2>
               {{ memberCardProfile.firstName || 'New' }}
               {{ memberCardProfile.lastName || 'Member' }}
             </h2>
-            <span class="member-role">{{ memberCardProfile.role || 'Professional' }}</span>
+            <div class="member-summary-row">
+              <span class="member-role">{{ memberCardProfile.role || 'Professional' }}</span>
+              <div class="member-love">
+                <img
+                  class="member-love-icon"
+                  src="assets/helpful-heart.svg"
+                  alt="Helpful chats"
+                  title="Helpful chats"
+                />
+                <strong>{{ memberCardProfile.helpfulFeedbackCount || 0 }}</strong>
+              </div>
+            </div>
             <p class="member-headline">
               {{ memberCardProfile.headline || 'Building a clear profile for better conversations.' }}
             </p>
@@ -96,9 +106,6 @@
                 <span>{{ memberCardProfile.location }}</span>
               }
             </div>
-            @if (memberCardProfile.bio) {
-              <p class="member-bio">{{ memberCardProfile.bio }}</p>
-            }
             @if (memberCardProfile.topics) {
               <div class="member-topics">
                 @for (topic of memberCardProfile.topics.split(','); track topic) {

@@ -4,6 +4,7 @@ import { FormsModule } from '@angular/forms';
 import { Router, RouterModule } from '@angular/router';
 import { AuthService } from '../../services/auth-service';
 import { ChatService } from '../../services/chat-service';
+import { ChatFeedbackService } from '../../services/chat-feedback-service';
 import { AvatarIllustrationComponent } from '../../shared/avatar-illustration.component';
 
 @Component({
@@ -23,6 +24,7 @@ export class ChatComponent implements AfterViewChecked, OnDestroy, OnInit {
 
   constructor(
     private router: Router,
+    private chatFeedbackService: ChatFeedbackService,
     public auth: AuthService,
     public chat: ChatService
   ) {}
@@ -101,6 +103,33 @@ export class ChatComponent implements AfterViewChecked, OnDestroy, OnInit {
   isOwnMessage(senderUserId: number) {
     const partner = this.chat.partner();
     return partner ? senderUserId !== partner.userId : false;
+  }
+
+  closeFeedbackModal() {
+    this.chat.clearPendingFeedback();
+  }
+
+  submitFeedbackChoice(wasHelpful: boolean) {
+    const pendingFeedback = this.chat.pendingFeedback();
+    if (!pendingFeedback) {
+      return;
+    }
+
+    this.chat.clearPendingFeedback();
+
+    this.chatFeedbackService
+      .submitFeedback({
+        sessionId: pendingFeedback.sessionId,
+        wasHelpful
+      })
+      .subscribe({
+        next: () => {
+          this.chat.setStatusMessage('Thanks for the feedback.');
+        },
+        error: () => {
+          this.chat.setStatusMessage('Feedback could not be saved.');
+        }
+      });
   }
 
   ngAfterViewChecked() {

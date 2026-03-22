@@ -54,10 +54,21 @@
 
         @if (chat.partner(); as partner) {
           <article class="partner-card">
-            <app-avatar-illustration [avatarId]="partner.avatarId" [size]="112"></app-avatar-illustration>
             <p class="eyebrow">Matched with</p>
+            <app-avatar-illustration [avatarId]="partner.avatarId" [size]="112"></app-avatar-illustration>
             <h2>{{ getPartnerDisplayName() }}</h2>
-            <span class="role-pill">{{ partner.role }}</span>
+            <div class="partner-summary-row">
+              <span class="role-pill">{{ partner.role }}</span>
+              <div class="partner-love">
+                <img
+                  class="partner-love-icon"
+                  src="assets/helpful-heart.svg"
+                  alt="Helpful chats"
+                  title="Helpful chats"
+                />
+                <strong>{{ partner.helpfulFeedbackCount || 0 }}</strong>
+              </div>
+            </div>
             <p class="partner-headline">{{ partner.headline || 'Ready for a focused conversation.' }}</p>
             <div class="partner-meta">
               @if (partner.expertise) {
@@ -147,3 +158,17 @@
     </section>
   }
 </div>
+
+@if (chat.pendingFeedback(); as pendingFeedback) {
+  <div class="feedback-modal-backdrop" (click)="closeFeedbackModal()">
+    <section class="feedback-modal" (click)="$event.stopPropagation()">
+      <p class="eyebrow">Post-chat feedback</p>
+      <h2>Was your conversation with {{ chat.getParticipantDisplayName(pendingFeedback.partner) }} useful?</h2>
+
+      <div class="feedback-actions">
+        <button class="feedback-choice positive" type="button" (click)="submitFeedbackChoice(true)">Yes</button>
+        <button class="feedback-choice" type="button" (click)="submitFeedbackChoice(false)">Not really</button>
+      </div>
+    </section>
+  </div>
+}

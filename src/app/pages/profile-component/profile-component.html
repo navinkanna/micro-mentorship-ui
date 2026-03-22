@@ -32,7 +32,18 @@
       <div class="field">
         <label>Avatar</label>
         <div class="avatar-preview-row">
-          <app-avatar-illustration [avatarId]="selectedAvatarId" [size]="148"></app-avatar-illustration>
+          <div class="avatar-preview-stack">
+            <app-avatar-illustration [avatarId]="selectedAvatarId" [size]="148"></app-avatar-illustration>
+            <div class="profile-love">
+              <img
+                class="profile-love-icon"
+                src="assets/helpful-heart.svg"
+                alt="Helpful chats"
+                title="Helpful chats"
+              />
+              <strong>{{ profileStats.helpfulFeedbackCount }}</strong>
+            </div>
+          </div>
           <button type="button" class="avatar-edit-button" (click)="openAvatarPicker()" aria-label="Edit avatar">
             <svg viewBox="0 0 24 24" aria-hidden="true">
               <path

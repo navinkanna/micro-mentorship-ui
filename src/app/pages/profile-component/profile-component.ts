@@ -23,6 +23,9 @@ export class ProfileComponent {
   saveMessage = '';
   errorMessage = '';
   isAvatarPickerOpen = false;
+  profileStats = {
+    helpfulFeedbackCount: 0
+  };
 
   constructor(private fb: FormBuilder, private router: Router, public auth: AuthService) {
     this.form = this.fb.group({
@@ -44,6 +47,9 @@ export class ProfileComponent {
   ngOnInit() {
     this.auth.getProfile().subscribe({
       next: (profile) => {
+        this.profileStats = {
+          helpfulFeedbackCount: profile.helpfulFeedbackCount || 0
+        };
         this.form.patchValue({
           ...profile,
           avatarId: profile.avatarId || this.defaultAvatarId

@@ -16,6 +16,7 @@ export interface UserProfile {
   headline: string;
   bio: string;
   topics: string;
+  helpfulFeedbackCount: number;
 }
 
 export interface RegisterPayload {

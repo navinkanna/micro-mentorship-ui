@@ -25,6 +25,7 @@ export interface ChatParticipant {
   expertise: string;
   industry: string;
   topics: string;
+  helpfulFeedbackCount: number;
 }
 
 export interface ChatMessage {
@@ -33,6 +34,11 @@ export interface ChatMessage {
   senderName: string;
   content: string;
   sentAtUtc: string;
+}
+
+export interface PendingChatFeedback {
+  sessionId: number;
+  partner: ChatParticipant;
 }
 
 interface ChatMatchFound {
@@ -59,6 +65,7 @@ export class ChatService {
   readonly sessionId = signal<number | null>(null);
   readonly partner = signal<ChatParticipant | null>(null);
   readonly messages = signal<ChatMessage[]>([]);
+  readonly pendingFeedback = signal<PendingChatFeedback | null>(null);
 
   constructor(private auth: AuthService) {}
 
@@ -122,9 +129,6 @@ export class ChatService {
 
     this.state.set('searching');
     this.statusMessage.set('Looking for another match...');
-    this.partner.set(null);
-    this.sessionId.set(null);
-    this.messages.set([]);
 
     try {
       await this.connection.invoke('SkipChat');
@@ -195,6 +199,7 @@ export class ChatService {
       this.sessionId.set(payload.sessionId);
       this.partner.set(payload.partner);
       this.messages.set([]);
+      this.pendingFeedback.set(null);
     });
 
     connection.on('ReceiveMessage', (payload: ChatMessage) => {
@@ -208,6 +213,12 @@ export class ChatService {
     });
 
     connection.on('ChatEnded', (payload: ChatQueueState) => {
+      const sessionId = this.sessionId();
+      const partner = this.partner();
+      if (sessionId && partner) {
+        this.pendingFeedback.set({ sessionId, partner });
+      }
+
       this.state.set('ended');
       this.statusMessage.set(this.sanitizeStatusMessage(payload.message || 'The chat has ended.'));
       this.sessionId.set(null);
@@ -296,6 +307,14 @@ export class ChatService {
 
   getConversationStarterPrompts(): string[] {
     return buildConversationStarterPrompts(this.currentUserProfile(), this.partner());
+  }
+
+  clearPendingFeedback() {
+    this.pendingFeedback.set(null);
+  }
+
+  setStatusMessage(message: string) {
+    this.statusMessage.set(message);
   }
 
   async preloadCurrentUserProfile(): Promise<void> {
