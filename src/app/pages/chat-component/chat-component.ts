@@ -1,9 +1,10 @@
 import { CommonModule } from '@angular/common';
-import { AfterViewChecked, Component, ElementRef, OnDestroy, ViewChild } from '@angular/core';
+import { AfterViewChecked, Component, ElementRef, OnDestroy, OnInit, ViewChild } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { Router, RouterModule } from '@angular/router';
 import { AuthService } from '../../services/auth-service';
 import { ChatService } from '../../services/chat-service';
+import { ChatFeedbackService } from '../../services/chat-feedback-service';
 import { AvatarIllustrationComponent } from '../../shared/avatar-illustration.component';
 
 @Component({
@@ -13,8 +14,9 @@ import { AvatarIllustrationComponent } from '../../shared/avatar-illustration.co
   templateUrl: './chat-component.html',
   styleUrl: './chat-component.scss'
 })
-export class ChatComponent implements AfterViewChecked, OnDestroy {
+export class ChatComponent implements AfterViewChecked, OnDestroy, OnInit {
   @ViewChild('messageList') private messageListRef?: ElementRef<HTMLDivElement>;
+  @ViewChild('composerInput') private composerInputRef?: ElementRef<HTMLTextAreaElement>;
 
   draftMessage = '';
   private previousMessageCount = 0;
@@ -22,9 +24,14 @@ export class ChatComponent implements AfterViewChecked, OnDestroy {
 
   constructor(
     private router: Router,
+    private chatFeedbackService: ChatFeedbackService,
     public auth: AuthService,
     public chat: ChatService
   ) {}
+
+  async ngOnInit() {
+    await this.chat.preloadCurrentUserProfile();
+  }
 
   async startChat() {
     await this.chat.startSearching();
@@ -74,6 +81,15 @@ export class ChatComponent implements AfterViewChecked, OnDestroy {
     return partner ? this.chat.getParticipantDisplayName(partner) : '';
   }
 
+  getStarterPrompts() {
+    return this.chat.getConversationStarterPrompts();
+  }
+
+  useStarterPrompt(prompt: string) {
+    this.draftMessage = prompt;
+    queueMicrotask(() => this.composerInputRef?.nativeElement.focus());
+  }
+
   getMessageSenderName(senderUserId: number, senderName: string) {
     return this.chat.getMessageDisplayName({
       sessionId: this.chat.sessionId() ?? 0,
@@ -87,6 +103,33 @@ export class ChatComponent implements AfterViewChecked, OnDestroy {
   isOwnMessage(senderUserId: number) {
     const partner = this.chat.partner();
     return partner ? senderUserId !== partner.userId : false;
+  }
+
+  closeFeedbackModal() {
+    this.chat.clearPendingFeedback();
+  }
+
+  submitFeedbackChoice(wasHelpful: boolean) {
+    const pendingFeedback = this.chat.pendingFeedback();
+    if (!pendingFeedback) {
+      return;
+    }
+
+    this.chat.clearPendingFeedback();
+
+    this.chatFeedbackService
+      .submitFeedback({
+        sessionId: pendingFeedback.sessionId,
+        wasHelpful
+      })
+      .subscribe({
+        next: () => {
+          this.chat.setStatusMessage('Thanks for the feedback.');
+        },
+        error: () => {
+          this.chat.setStatusMessage('Feedback could not be saved.');
+        }
+      });
   }
 
   ngAfterViewChecked() {
