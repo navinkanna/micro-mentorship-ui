@@ -1,10 +1,12 @@
 import { computed, Injectable, signal } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
-import { finalize, Observable, shareReplay, tap } from 'rxjs';
+import { finalize, map, Observable, shareReplay, tap } from 'rxjs';
 import { environment } from '../../environments/environment';
 
 export interface UserProfile {
   avatarId: string;
+  avatarMode: string;
+  profilePhotoUrl: string;
   firstName: string;
   lastName: string;
   role: string;
@@ -30,6 +32,18 @@ export interface TokenResponse {
   refreshToken: string;
 }
 
+export interface LinkedInAuthConfig {
+  clientId: string;
+  redirectUri: string;
+  scope: string;
+}
+
+export interface LinkedInCodeExchangePayload {
+  code: string;
+  redirectUri: string;
+  role?: string;
+}
+
 @Injectable({
   providedIn: 'root'
 })
@@ -40,6 +54,8 @@ export class AuthService {
   private readonly apiUrl = `${environment.apiBaseUrl}/Authorize/login`;
   private readonly registerApiUrl = `${environment.apiBaseUrl}/Authorize/register`;
   private readonly refreshApiUrl = `${environment.apiBaseUrl}/Authorize/refresh`;
+  private readonly linkedInConfigApiUrl = `${environment.apiBaseUrl}/Authorize/linkedin/config`;
+  private readonly linkedInExchangeApiUrl = `${environment.apiBaseUrl}/Authorize/linkedin/exchange`;
   private readonly profileApiUrl = `${environment.apiBaseUrl}/profile`;
   private readonly authenticated = signal(this.hasStoredSession());
   private readonly currentUserEmail = signal(localStorage.getItem(this.emailKey) ?? '');
@@ -59,6 +75,14 @@ export class AuthService {
 
   register(payload: RegisterPayload): Observable<string> {
     return this.http.post(this.registerApiUrl, payload, { responseType: 'text' });
+  }
+
+  getLinkedInConfig(): Observable<LinkedInAuthConfig> {
+    return this.http.get<LinkedInAuthConfig>(this.linkedInConfigApiUrl);
+  }
+
+  exchangeLinkedInCode(payload: LinkedInCodeExchangePayload): Observable<TokenResponse> {
+    return this.http.post<TokenResponse>(this.linkedInExchangeApiUrl, payload);
   }
 
   storeSession(email: string, tokens: TokenResponse): void {
@@ -131,5 +155,19 @@ export class AuthService {
 
   saveProfile(profile: UserProfile): Observable<UserProfile> {
     return this.http.put<UserProfile>(this.profileApiUrl, profile);
+  }
+
+  getPostLoginRedirectPath(): Observable<string> {
+    return this.getProfile().pipe(
+      map((profile) => (this.isProfileComplete(profile) ? '/home' : '/profile'))
+    );
+  }
+
+  private isProfileComplete(profile: UserProfile): boolean {
+    return Boolean(
+      profile.firstName?.trim() &&
+      profile.lastName?.trim() &&
+      profile.role?.trim()
+    );
   }
 }

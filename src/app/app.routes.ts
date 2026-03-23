@@ -6,12 +6,14 @@ import { ProfileComponent } from './pages/profile-component/profile-component';
 import { ChatComponent } from './pages/chat-component/chat-component';
 import { RecentChatsComponent } from './pages/recent-chats-component/recent-chats-component';
 import { TranscriptDetailComponent } from './pages/transcript-detail-component/transcript-detail-component';
+import { LinkedInCallbackComponent } from './pages/linkedin-callback-component/linkedin-callback-component';
 
 export const routes: Routes = [
   { path: '', component: HomeComponent },
   { path: 'home', component: HomeComponent },
   { path: 'login', component: LoginComponent },
   { path: 'signup', component: SignUpComponent },
+  { path: 'auth/linkedin/callback', component: LinkedInCallbackComponent },
   { path: 'profile', component: ProfileComponent },
   { path: 'chat', component: ChatComponent },
   { path: 'recent-chats', component: RecentChatsComponent },

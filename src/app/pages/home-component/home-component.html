@@ -14,7 +14,7 @@
       @if (auth.isAuthenticated()) {
         <div class="member-pill">
           <span class="status-dot"></span>
-          <span>{{ auth.userEmail() || 'Signed in' }}</span>
+          <span>{{ memberDisplayName }}</span>
         </div>
         <button class="btn btn-secondary" (click)="recentChatsPage()">Recent chats</button>
         <button class="btn btn-secondary" (click)="profile()">Profile</button>
@@ -75,7 +75,12 @@
         <button class="modal-close" type="button" (click)="closePreview()">Close</button>
         @if (memberCardProfile) {
           <div class="member-card">
-            <app-avatar-illustration [avatarId]="memberCardProfile.avatarId" [size]="120"></app-avatar-illustration>
+            <app-avatar-illustration
+              [avatarId]="memberCardProfile.avatarId"
+              [avatarMode]="memberCardProfile.avatarMode"
+              [profilePhotoUrl]="memberCardProfile.profilePhotoUrl"
+              [size]="120"
+            ></app-avatar-illustration>
             <h2>
               {{ memberCardProfile.firstName || 'New' }}
               {{ memberCardProfile.lastName || 'Member' }}

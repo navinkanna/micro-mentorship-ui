@@ -10,7 +10,12 @@
   } @else if (transcript) {
     <section class="transcript-shell">
       <aside class="transcript-sidebar">
-        <app-avatar-illustration [avatarId]="transcript.partnerAvatarId" [size]="112"></app-avatar-illustration>
+        <app-avatar-illustration
+          [avatarId]="transcript.partnerAvatarId"
+          [avatarMode]="transcript.partnerAvatarMode"
+          [profilePhotoUrl]="transcript.partnerProfilePhotoUrl"
+          [size]="112"
+        ></app-avatar-illustration>
         <p class="eyebrow">Transcript with</p>
         <h1>{{ getPartnerDisplayName() }}</h1>
         <span class="role-pill">{{ transcript.partnerRole || 'Professional' }}</span>

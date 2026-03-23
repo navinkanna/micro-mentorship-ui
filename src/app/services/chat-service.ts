@@ -19,6 +19,8 @@ export interface ChatParticipant {
   userName: string;
   role: string;
   avatarId: string;
+  avatarMode: string;
+  profilePhotoUrl: string | null;
   firstName: string;
   lastName: string;
   headline: string;

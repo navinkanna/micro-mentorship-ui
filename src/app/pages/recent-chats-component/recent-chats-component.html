@@ -32,7 +32,12 @@
         @for (chat of recentChats; track chat.sessionId) {
           <button class="recent-row" type="button" (click)="openTranscript(chat.sessionId)">
             <div class="recent-row-main">
-              <app-avatar-illustration [avatarId]="chat.partnerAvatarId" [size]="58"></app-avatar-illustration>
+              <app-avatar-illustration
+                [avatarId]="chat.partnerAvatarId"
+                [avatarMode]="chat.partnerAvatarMode"
+                [profilePhotoUrl]="chat.partnerProfilePhotoUrl"
+                [size]="58"
+              ></app-avatar-illustration>
               <div class="identity-block">
                 <div class="identity-line">
                   <h2>{{ getPartnerDisplayName(chat) }}</h2>

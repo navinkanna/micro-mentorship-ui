@@ -1,0 +1,16 @@
+<section class="callback-shell">
+  <div class="callback-card">
+    <p class="eyebrow">LinkedIn sign-in</p>
+    <h1>Connecting your account</h1>
+
+    @if (errorMessage) {
+      <p class="error-message">{{ errorMessage }}</p>
+      <div class="actions">
+        <a routerLink="/login" class="btn-secondary">Back to login</a>
+        <a routerLink="/signup" class="btn-primary">Try from sign up</a>
+      </div>
+    } @else {
+      <p class="status-message">{{ statusMessage }}</p>
+    }
+  </div>
+</section>

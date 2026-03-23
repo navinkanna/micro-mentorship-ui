@@ -9,6 +9,8 @@ export interface RecentChatSummary {
   partnerUserName: string;
   partnerRole: string;
   partnerAvatarId: string;
+  partnerAvatarMode: string;
+  partnerProfilePhotoUrl: string | null;
   partnerFirstName: string;
   partnerLastName: string;
   partnerHeadline: string;
@@ -31,6 +33,8 @@ export interface RecentChatTranscript {
   partnerUserName: string;
   partnerRole: string;
   partnerAvatarId: string;
+  partnerAvatarMode: string;
+  partnerProfilePhotoUrl: string | null;
   partnerFirstName: string;
   partnerLastName: string;
   partnerHeadline: string;
