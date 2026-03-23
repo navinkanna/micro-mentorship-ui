@@ -33,7 +33,12 @@
         <label>Avatar</label>
         <div class="avatar-preview-row">
           <div class="avatar-preview-stack">
-            <app-avatar-illustration [avatarId]="selectedAvatarId" [size]="148"></app-avatar-illustration>
+            <app-avatar-illustration
+              [avatarId]="selectedAvatarId"
+              [avatarMode]="selectedAvatarMode"
+              [profilePhotoUrl]="profilePhotoUrl"
+              [size]="148"
+            ></app-avatar-illustration>
             <div class="profile-love">
               <img
                 class="profile-love-icon"
@@ -53,6 +58,23 @@
             </svg>
             <span>Edit avatar</span>
           </button>
+          @if (hasProfilePhoto) {
+            <button
+              type="button"
+              class="avatar-edit-button"
+              [class.active]="selectedAvatarMode === 'photo'"
+              (click)="selectProfilePhoto()"
+              aria-label="Use LinkedIn profile photo"
+            >
+              <svg viewBox="0 0 24 24" aria-hidden="true">
+                <path
+                  d="M12 12.25a3.25 3.25 0 1 0-3.25-3.25A3.25 3.25 0 0 0 12 12.25Zm0 1.5c-2.9 0-5.25 1.62-5.25 3.62V19h10.5v-1.63c0-2-2.35-3.62-5.25-3.62ZM12 3a9 9 0 1 1-9 9 9 9 0 0 1 9-9Z"
+                  fill="currentColor"
+                />
+              </svg>
+              <span>Use LinkedIn photo</span>
+            </button>
+          }
         </div>
       </div>
 
@@ -60,10 +82,16 @@
         <div class="field">
           <label for="firstName">First name</label>
           <input id="firstName" type="text" formControlName="firstName" placeholder="Navin" />
+          @if (form.controls.firstName.invalid && form.controls.firstName.touched) {
+            <p class="error-message">First name is required.</p>
+          }
         </div>
         <div class="field">
           <label for="lastName">Last name</label>
           <input id="lastName" type="text" formControlName="lastName" placeholder="Patel" />
+          @if (form.controls.lastName.invalid && form.controls.lastName.touched) {
+            <p class="error-message">Last name is required.</p>
+          }
         </div>
       </div>
 
@@ -184,10 +212,15 @@
           <button
             type="button"
             class="avatar-option"
-            [class.active]="selectedAvatarId === avatar.id"
+            [class.active]="selectedAvatarMode === 'illustration' && selectedAvatarId === avatar.id"
             (click)="selectAvatar(avatar.id)"
           >
-            <app-avatar-illustration [avatarId]="avatar.id" [size]="104"></app-avatar-illustration>
+            <app-avatar-illustration
+              [avatarId]="avatar.id"
+              avatarMode="illustration"
+              [size]="104"
+            ></app-avatar-illustration>
+            <span>{{ avatar.label }}</span>
           </button>
         }
       </div>

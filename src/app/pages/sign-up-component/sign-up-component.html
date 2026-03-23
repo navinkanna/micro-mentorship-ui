@@ -5,6 +5,18 @@
     <p class="eyebrow">Create account</p>
     <h1>Get started.</h1>
 
+    <button
+      type="button"
+      class="btn-linkedin"
+      [disabled]="isLinkedInLoading || isLoading"
+      (click)="continueWithLinkedIn()"
+    >
+      <img src="assets/linkedin-logo.svg" alt="" aria-hidden="true" class="btn-linkedin-icon" />
+      {{ isLinkedInLoading ? 'Redirecting to LinkedIn...' : 'Continue with LinkedIn' }}
+    </button>
+
+    <p class="divider"><span>or create an account with email</span></p>
+
     <form [formGroup]="form" (ngSubmit)="submit()">
       <input type="email" formControlName="email" placeholder="Email" />
       @if (form.controls.email.invalid && form.controls.email.touched) {

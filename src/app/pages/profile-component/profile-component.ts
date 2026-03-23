@@ -30,8 +30,10 @@ export class ProfileComponent {
   constructor(private fb: FormBuilder, private router: Router, public auth: AuthService) {
     this.form = this.fb.group({
       avatarId: [avatarOptions[0].id, Validators.required],
-      firstName: [''],
-      lastName: [''],
+      avatarMode: ['illustration'],
+      profilePhotoUrl: [''],
+      firstName: ['', Validators.required],
+      lastName: ['', Validators.required],
       role: ['', Validators.required],
       expertise: [''],
       yearsOfExperience: [''],
@@ -52,7 +54,9 @@ export class ProfileComponent {
         };
         this.form.patchValue({
           ...profile,
-          avatarId: profile.avatarId || this.defaultAvatarId
+          avatarId: profile.avatarId || this.defaultAvatarId,
+          avatarMode: profile.avatarMode || 'illustration',
+          profilePhotoUrl: profile.profilePhotoUrl || ''
         });
         this.profileExists = true;
         this.isLoading = false;
@@ -73,8 +77,16 @@ export class ProfileComponent {
   }
 
   selectAvatar(avatarId: string) {
-    this.form.patchValue({ avatarId });
+    this.form.patchValue({ avatarId, avatarMode: 'illustration' });
     this.isAvatarPickerOpen = false;
+  }
+
+  selectProfilePhoto() {
+    if (!this.hasProfilePhoto) {
+      return;
+    }
+
+    this.form.patchValue({ avatarMode: 'photo' });
   }
 
   openAvatarPicker() {
@@ -87,6 +99,18 @@ export class ProfileComponent {
 
   get selectedAvatarId(): string {
     return this.form.value.avatarId || this.defaultAvatarId;
+  }
+
+  get selectedAvatarMode(): string {
+    return this.form.value.avatarMode || 'illustration';
+  }
+
+  get profilePhotoUrl(): string {
+    return this.form.value.profilePhotoUrl || '';
+  }
+
+  get hasProfilePhoto(): boolean {
+    return Boolean(this.profilePhotoUrl);
   }
 
   saveProfile() {

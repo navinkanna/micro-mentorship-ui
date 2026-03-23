@@ -23,6 +23,12 @@ export class HomeComponent {
 
   constructor(private router: Router, public auth: AuthService) {}
 
+  ngOnInit() {
+    if (this.auth.isAuthenticated()) {
+      this.loadProfilePreview();
+    }
+  }
+
   signup() {
     this.router.navigate(['/signup']);
   }
@@ -69,5 +75,13 @@ export class HomeComponent {
         this.memberCardProfile = null;
       }
     });
+  }
+
+  get memberDisplayName(): string {
+    const firstName = this.memberCardProfile?.firstName?.trim() || '';
+    const lastName = this.memberCardProfile?.lastName?.trim() || '';
+    const fullName = `${firstName} ${lastName}`.trim();
+
+    return fullName || this.auth.userEmail() || 'Signed in';
   }
 }

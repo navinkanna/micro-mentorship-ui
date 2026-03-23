@@ -14,7 +14,9 @@ import { strongPasswordValidator } from '../../validators/password-validator';
   styleUrl: './sign-up-component.scss'
 })
 export class SignUpComponent {
+  private readonly linkedInStateStorageKey = 'linkedin_auth_state';
   isLoading = false;
+  isLinkedInLoading = false;
   errorMessage = '';
   form: any;
 
@@ -72,5 +74,50 @@ export class SignUpComponent {
         this.errorMessage = 'Could not create account.';
       }
     });
+  }
+
+  continueWithLinkedIn() {
+    if (this.isLinkedInLoading) {
+      return;
+    }
+
+    this.isLinkedInLoading = true;
+    this.errorMessage = '';
+
+    this.auth.getLinkedInConfig().subscribe({
+      next: (config) => {
+        const state = this.createLinkedInState();
+        localStorage.setItem(this.linkedInStateStorageKey, state);
+
+        const authorizationUrl = new URL('https://www.linkedin.com/oauth/v2/authorization');
+        authorizationUrl.searchParams.set('response_type', 'code');
+        authorizationUrl.searchParams.set('client_id', config.clientId);
+        authorizationUrl.searchParams.set('redirect_uri', config.redirectUri);
+        authorizationUrl.searchParams.set('scope', config.scope);
+        authorizationUrl.searchParams.set('state', state);
+
+        window.location.href = authorizationUrl.toString();
+      },
+      error: (error) => {
+        this.isLinkedInLoading = false;
+        this.errorMessage = this.getLinkedInErrorMessage(error);
+      }
+    });
+  }
+
+  private createLinkedInState(): string {
+    if ('randomUUID' in crypto) {
+      return crypto.randomUUID();
+    }
+
+    return `${Date.now()}-${Math.random().toString(36).slice(2)}`;
+  }
+
+  private getLinkedInErrorMessage(error: unknown): string {
+    if (error instanceof HttpErrorResponse && typeof error.error === 'string') {
+      return error.error;
+    }
+
+    return 'LinkedIn sign-in is not available right now.';
   }
 }

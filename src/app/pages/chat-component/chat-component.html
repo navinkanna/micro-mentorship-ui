@@ -55,7 +55,12 @@
         @if (chat.partner(); as partner) {
           <article class="partner-card">
             <p class="eyebrow">Matched with</p>
-            <app-avatar-illustration [avatarId]="partner.avatarId" [size]="112"></app-avatar-illustration>
+            <app-avatar-illustration
+              [avatarId]="partner.avatarId"
+              [avatarMode]="partner.avatarMode"
+              [profilePhotoUrl]="partner.profilePhotoUrl"
+              [size]="112"
+            ></app-avatar-illustration>
             <h2>{{ getPartnerDisplayName() }}</h2>
             <div class="partner-summary-row">
               <span class="role-pill">{{ partner.role }}</span>
