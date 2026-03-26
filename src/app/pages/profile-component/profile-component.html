@@ -81,14 +81,14 @@
       <div class="field-grid two-up">
         <div class="field">
           <label for="firstName">First name</label>
-          <input id="firstName" type="text" formControlName="firstName" placeholder="Navin" />
+          <input id="firstName" type="text" formControlName="firstName" placeholder="First Name" />
           @if (form.controls.firstName.invalid && form.controls.firstName.touched) {
             <p class="error-message">First name is required.</p>
           }
         </div>
         <div class="field">
           <label for="lastName">Last name</label>
-          <input id="lastName" type="text" formControlName="lastName" placeholder="Patel" />
+          <input id="lastName" type="text" formControlName="lastName" placeholder="Last Name" />
           @if (form.controls.lastName.invalid && form.controls.lastName.touched) {
             <p class="error-message">Last name is required.</p>
           }
